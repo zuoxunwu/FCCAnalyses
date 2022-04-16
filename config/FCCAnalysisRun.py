@@ -55,7 +55,15 @@ def getElement(foo, element):
              return "group_u_FCC.local_gen"
 
         elif element=='outputDirEos':
-            print('The variable <outputDirEos> is optional in your analysis.py file, return empty string')
+            print('The variable <outputDirEos> is optional in your analysis.py file, return default empty string')
+            return ""
+
+        elif element=='eosType':
+            print('The variable <outputDirEos> is optional in your analysis.py file, return default eospublic')
+            return "eospublic"
+
+        elif element=='userBatchConfig':
+            print('The variable <userBatchConfig> is optional in your analysis.py file, return default empty string')
             return ""
 
         return None
@@ -232,11 +240,16 @@ def runRDF(foo, inputlist, outFile, nevt):
 #__________________________________________________________
 def sendToBatch(foo, chunkList, process, analysisFile):
     localDir = os.environ["LOCAL_DIR"]
-    logDir = localDir+"/BatchOutputs/{}".format(output)
-    outputDir = getElement(foo, "outputDir")
-    outputDirEos = getElement(foo, "outputDirEos")
+    logDir   = localDir+"/BatchOutputs/{}".format(output)
     if not os.path.exists(logDir):
         os.system("mkdir -p {}".format(logDir))
+
+    outputDir       = getElement(foo, "outputDir")
+    outputDirEos    = getElement(foo, "outputDirEos")
+    eosType         = getElement(foo, "eosType")
+    userBatchConfig = getElement(foo, "userBatchConfig")
+
+    if outputDir!="" and outputDir[-1]!="/": outputDir+="/"
 
     condor_file_str=''
     for ch in range(len(chunkList)):
@@ -255,24 +268,38 @@ def sendToBatch(foo, chunkList, process, analysisFile):
         subprocess.getstatusoutput('chmod 777 %s'%(frunname))
         frun.write('#!/bin/bash\n')
         frun.write('source /cvmfs/sw.hsf.org/key4hep/setup.sh\n')
-        #frun.write('export PYTHONPATH=$LOCAL_DIR:$PYTHONPATH\n')
-        #frun.write('export LD_LIBRARY_PATH=$LOCAL_DIR/install/lib:$LD_LIBRARY_PATH\n')
-        #frun.write('export ROOT_INCLUDE_PATH=$LOCAL_DIR/install/include/FCCAnalyses:$ROOT_INCLUDE_PATH\n')
+        frun.write('export PYTHONPATH=$LOCAL_DIR:$PYTHONPATH\n')
+        frun.write('export LD_LIBRARY_PATH=$LOCAL_DIR/install/lib:$LD_LIBRARY_PATH\n')
+        frun.write('export ROOT_INCLUDE_PATH=$LOCAL_DIR/install/include/FCCAnalyses:$ROOT_INCLUDE_PATH\n')
+
+        #add userBatchConfig if any
+        if userBatchConfig!="":
+            if not os.path.isfile(userBatchConfig):
+                print('----> userBatchConfig file does not exist, will not add it to default config, please check')
+            else:
+                configFile=open(userBatchConfig)
+                for line in configFile:
+                    frun.write(line+'\n')
 
         frun.write('mkdir job{}_chunk{}\n'.format(process,ch))
         frun.write('cd job{}_chunk{}\n'.format(process,ch))
-        frun.write('python $LOCAL_DIR/config/FCCAnalysisRun.py {} --batch --output {}/chunk{}.root --files-list '.format(analysisFile, outputDir, ch))
+
+        if not os.path.isabs(outputDir):
+            frun.write('python $LOCAL_DIR/config/FCCAnalysisRun.py {} --batch --output {}chunk{}.root --files-list '.format(analysisFile, outputDir, ch))
+        else:
+            frun.write('python $LOCAL_DIR/config/FCCAnalysisRun.py {} --batch --output {}{}/chunk{}.root --files-list '.format(analysisFile, outputDir, process,ch))
+
         for ff in range(len(chunkList[ch])):
             frun.write(' %s'%(chunkList[ch][ff]))
         frun.write('\n')
         if not os.path.isabs(outputDir):
             if outputDirEos=="":
-                frun.write('cp {}/chunk{}.root  {}/{}/{}/chunk{}.root\n'.format(outputDir,ch,localDir,outputDir,process,ch))
+                frun.write('cp {}chunk{}.root  {}/{}/{}/chunk{}.root\n'.format(outputDir,ch,localDir,outputDir,process,ch))
             else:
-                frun.write('xrdcp {}/chunk{}.root  root://eospublic.cern.ch/{}/{}/chunk{}.root\n'.format(outputDir,ch,outputDirEos,process,ch))
+                frun.write('xrdcp {}chunk{}.root  root://{}.cern.ch/{}/{}/chunk{}.root\n'.format(outputDir,ch,eosType,outputDirEos,process,ch))
         else:
             if outputDirEos!="":
-                frun.write('xrdcp {}/chunk{}.root  root://eospublic.cern.ch/{}/{}/chunk{}.root\n'.format(outputDir,ch,outputDirEos,process,ch))
+                frun.write('xrdcp {}chunk{}.root  root://{}.cern.ch/{}/{}/chunk{}.root\n'.format(outputDir,ch,eosType,outputDirEos,process,ch))
 
         frun.close()
 
@@ -329,7 +356,7 @@ def runLocal(foo, fileList, output, batch):
         nevents_local+=tt.GetEntries()
     print ("----> nevents original={}  local={}".format(nevents_meta,nevents_local))
     outFile = getElement(foo,"outputDir")
-    if outFile[-1]!="/":outFile+="/"
+    if outFile!="" and outFile[-1]!="/": outFile+="/"
 
     if batch==False:
         outFile+=output
