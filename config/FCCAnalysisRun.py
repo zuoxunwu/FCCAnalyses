@@ -255,13 +255,20 @@ def sendToBatch(foo, chunkList, process, analysisFile):
         subprocess.getstatusoutput('chmod 777 %s'%(frunname))
         frun.write('#!/bin/bash\n')
         frun.write('source /cvmfs/sw.hsf.org/key4hep/setup.sh\n')
+        #frun.write('source /cvmfs/sw.hsf.org/spackages4/key4hep-stack/2021-11-26/x86_64-centos7-gcc8.3.0-opt/mynqr2z/setup.sh\n')
         #frun.write('export PYTHONPATH=$LOCAL_DIR:$PYTHONPATH\n')
         #frun.write('export LD_LIBRARY_PATH=$LOCAL_DIR/install/lib:$LD_LIBRARY_PATH\n')
         #frun.write('export ROOT_INCLUDE_PATH=$LOCAL_DIR/install/include/FCCAnalyses:$ROOT_INCLUDE_PATH\n')
 
         frun.write('mkdir job{}_chunk{}\n'.format(process,ch))
         frun.write('cd job{}_chunk{}\n'.format(process,ch))
-        frun.write('python $LOCAL_DIR/config/FCCAnalysisRun.py {} --batch --output {}/chunk{}.root --files-list '.format(analysisFile, outputDir, ch))
+#        frun.write('python $LOCAL_DIR/config/FCCAnalysisRun.py {} --batch --output {}/chunk{}.root --files-list '.format(analysisFile, outputDir, ch))
+        if not os.path.isabs(outputDir):
+            frun.write('python $LOCAL_DIR/config/FCCAnalysisRun.py {} --batch --output {}chunk{}.root --files-list '.format(analysisFile, outputDir, ch))
+        else:
+            frun.write('python $LOCAL_DIR/config/FCCAnalysisRun.py {} --batch --output {}{}/chunk{}.root --files-list '.format(analysisFile, outputDir, process,ch))
+
+
         for ff in range(len(chunkList[ch])):
             frun.write(' %s'%(chunkList[ch][ff]))
         frun.write('\n')
@@ -446,7 +453,7 @@ if __name__ == "__main__":
 
         #create dir if more than 1 chunk
         if chunks>1:
-            outputdir=outputDir+"/"+output
+            outputdir=outputDir+output
 
             if not os.path.exists(outputdir) and outputdir!='':
                 os.system("mkdir -p {}".format(outputdir))
