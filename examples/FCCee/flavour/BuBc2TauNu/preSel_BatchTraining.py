@@ -16,16 +16,16 @@ inputana=fcc_dir+"FCCAnalyses/examples/FCCee/flavour/BuBc2TauNu/analysis_stage1.
 # May need a different path name
 outdir="/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2022/prod_04/Batch_Training_4stage1/"
 
-fraction=0.1
+fraction=1.
 
-process_list=[#'p8_ee_Zbb_ecm91',
-              #'p8_ee_Zcc_ecm91',
+process_list=['p8_ee_Zbb_ecm91',
+              'p8_ee_Zcc_ecm91',
               'p8_ee_Zuds_ecm91']
 myana=rdf.runDataFrameBatch(basedir,process_list, outlist=output_list)
 myana.run(ncpu=NUM_CPUS,fraction=fraction, chunks=50 ,outDir=outdir, inputana=inputana)
 
 
-fraction=0.1
+fraction=1.
 process_list=['p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU',    
               'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU'
               ]

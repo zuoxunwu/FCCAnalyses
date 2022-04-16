@@ -1,10 +1,10 @@
 #TRAINING
 processList_training = {
-#    'p8_ee_Zbb_ecm91':{'chunks':50},
-#    'p8_ee_Zcc_ecm91':{'chunks':50},
+    'p8_ee_Zbb_ecm91':{'chunks':50},
+    'p8_ee_Zcc_ecm91':{'chunks':50},
     'p8_ee_Zuds_ecm91':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50}
+    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50}
 }
 prodTag_training     = "FCCee/spring2021_training/IDEA/"
 outputDirEos_training   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2022/prod_04/Batch_Training_stage1/"
@@ -57,14 +57,14 @@ outputDirEos = outputDirEos_analysis
 prodTag      = prodTag_analysis
 MVAFilter    = "EVT_MVA1>0.6"
 
-runTraining=True
+runTraining==False
 if runTraining:
     processList  = processList_training
     outputDirEos = outputDirEos_training
     prodTag      = prodTag_training
     MVAFilter    = "EVT_MVA1>-1.0"
 
-outputDir   = "/"
+outputDir   = ""
 nCPUS       = 8
 runBatch    = True
 batchQueue  = "workday"
@@ -337,7 +337,7 @@ class RDFanalysis():
 
                .Define("TrueTau23PiBu_vertex",        "myUtils::get_trueVertex(MCVertexObject,Particle,Particle0, 15, 521)")
            )
-        return df2
+           return df2
 
     #__________________________________________________________
     #Mandatory: output function, please make sure you return the branchlist as a python list
