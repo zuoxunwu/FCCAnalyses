@@ -4,12 +4,12 @@ processList = {
     'p8_ee_ZH_ecm240_out':{'output':'MySample_p8_ee_ZH_ecm240'} #Run over the full statistics from stage1 input file <inputDir>/p8_ee_ZH_ecm240_out.root. Change the output name to MySample_p8_ee_ZH_ecm240
 }
 
-#Mandatory: input directory when not running over centrally produced edm4hep events. 
+#Mandatory: input directory when not running over centrally produced edm4hep events.
 #It can still be edm4hep files produced standalone or files from a first analysis step (this is the case in this example it runs over the files produced from analysis.py)
-inputDir    = "outputs/FCCee/higgs/mH-recoil/mumu/stage1"
+inputDir    = "outputs/FCCee/higgs/mH-recoil/ee/stage1"
 
 #Optional: output directory, default is local dir
-outputDir   = "outputs/FCCee/higgs/mH-recoil/mumu/stage2"
+outputDir   = "outputs/FCCee/higgs/mH-recoil/ee/stage2"
 
 #Optional: ncpus, default is 4
 nCPUS       = 2
@@ -64,7 +64,3 @@ class RDFanalysis():
             "entry","weight"
         ]
         return branchList
-
-
-
-
