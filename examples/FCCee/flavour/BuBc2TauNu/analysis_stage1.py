@@ -1,10 +1,10 @@
 #TRAINING
 processList_training = {
-    'p8_ee_Zbb_ecm91':{'chunks':50},
-    'p8_ee_Zcc_ecm91':{'chunks':50},
+#    'p8_ee_Zbb_ecm91':{'chunks':50},
+#    'p8_ee_Zcc_ecm91':{'chunks':50},
     'p8_ee_Zuds_ecm91':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50}
+#    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50}
 }
 prodTag_training     = "FCCee/spring2021_training/IDEA/"
 outputDirEos_training   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2022/prod_04/Batch_Training_stage1/"
@@ -57,7 +57,7 @@ outputDirEos = outputDirEos_analysis
 prodTag      = prodTag_analysis
 MVAFilter    = "EVT_MVA1>0.6"
 
-runTraining=False
+runTraining=True
 if runTraining:
     processList  = processList_training
     outputDirEos = outputDirEos_training
