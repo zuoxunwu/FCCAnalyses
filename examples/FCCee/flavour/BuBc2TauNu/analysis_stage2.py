@@ -234,7 +234,7 @@ class RDFanalysis():
 
                 "EVT_DVd0_min", "EVT_DVd0_max", "EVT_DVd0_ave",
                 "EVT_DVz0_min", "EVT_DVz0_max", "EVT_DVz0_ave",
-                "EVT_DVmass_min", "EVT_DVmass_max", "EVT_DVmass_ave", "EVT_DVmass_Dmeson"
+                "EVT_DVmass_min", "EVT_DVmass_max", "EVT_DVmass_ave", "EVT_DVmass_Dmeson",
                 "EVT_PVmass",
                 "EVT_Nominal_B_E",
                 "MCVertex_PDG","MCVertex_PDGmother","MCVertex_PDGgmother","MCVertex_n","MCVertex_nmother","MCVertex_ngmother",
