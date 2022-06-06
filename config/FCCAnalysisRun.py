@@ -8,12 +8,16 @@ import subprocess
 import importlib.util
 from array import array
 from config.common_defaults import deffccdicts
+import datetime
 
 print ("----> Load cxx analyzers from libFCCAnalyses... ",)
 ROOT.gSystem.Load("libFCCAnalyses")
 ROOT.gErrorIgnoreLevel = ROOT.kFatal
 #Is this still needed?? 01/04/2022 still to be the case
 _fcc  = ROOT.dummyLoader
+
+
+date=datetime.datetime.fromtimestamp(datetime.datetime.now().timestamp()).strftime('%Y-%m-%d_%H-%M-%S')
 
 #__________________________________________________________
 def getElement(rdfModule, element, isFinal=False):
@@ -35,6 +39,10 @@ def getElement(rdfModule, element, isFinal=False):
             print('The function <{}> is mandatory in your analysis.py file, will exit'.format(element))
             if isFinal: print('The function <{}> is not part of final analysis'.format(element))
             sys.exit(3)
+
+        elif element=='analysisName':
+            print('The variable <analysisName> is optional in your analysis.py file, return default value ""')
+            return ""
 
         elif element=='nCPUS':
             print('The variable <{}> is optional in your analysis.py file, return default value 4'.format(element))
@@ -234,6 +242,22 @@ def getchunkList(fileList, chunks):
 
 
 #__________________________________________________________
+def saveBenchmark(outfile, benchmark):
+    benchmarks = []
+    try:
+        with open(outfile, 'r') as benchin:
+            benchmarks = json.load(benchin)
+    except OSError:
+        pass
+
+    benchmarks = [b for b in benchmarks if b['name'] != benchmark['name']]
+    benchmarks.append(benchmark)
+
+    with open(outfile, 'w') as benchout:
+        json.dump(benchmarks, benchout, indent=2)
+
+
+#__________________________________________________________
 def getCommandOutput(command):
     p = subprocess.Popen(command, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE,universal_newlines=True)
     (stdout,stderr) = p.communicate()
@@ -287,14 +311,24 @@ def runPreprocess(df):
     sys.exit(3)
     return df
 #__________________________________________________________
-def runRDF(rdfModule, inputlist, outFile, nevt):
-    ROOT.ROOT.EnableImplicitMT(getElement(rdfModule, "nCPUS"))
+def runRDF(rdfModule, inputlist, outFile, nevt, args):
+    # for convenience and compatibility with user code
+    ROOT.gInterpreter.Declare("using namespace FCCAnalyses;")
+
+    # cannot use MT with Range()
+    if args.nevents < 0:
+      ROOT.ROOT.EnableImplicitMT(getElement(rdfModule, "nCPUS"))
     ROOT.EnableThreadSafety()
     df = ROOT.RDataFrame("events", inputlist)
+
+    # limit number of events processed
+    if args.nevents > 0:
+      df = df.Range(0, args.nevents)
 
     preprocess=False
     if preprocess:
         df2 = runPreprocess(df)
+
     print ("----> Init done, about to run {} events on {} CPUs".format(nevt, getElement(rdfModule, "nCPUS")))
 
     df2 = getElement(rdfModule.RDFanalysis, "analysers")(df)
@@ -310,7 +344,7 @@ def runRDF(rdfModule, inputlist, outFile, nevt):
 #__________________________________________________________
 def sendToBatch(rdfModule, chunkList, process, analysisFile):
     localDir = os.environ["LOCAL_DIR"]
-    logDir   = localDir+"/BatchOutputs/{}".format(process)
+    logDir   = localDir+"/BatchOutputs/{}/{}".format(date,process)
     if not os.path.exists(logDir):
         os.system("mkdir -p {}".format(logDir))
 
@@ -406,7 +440,7 @@ def sendToBatch(rdfModule, chunkList, process, analysisFile):
 
 
 #__________________________________________________________
-def runLocal(rdfModule, fileList, output, batch):
+def runLocal(rdfModule, fileList, args):
     #Create list of files to be Processed
     print ("----> Create dataframe object from files: ", )
     fileListRoot = ROOT.vector('string')()
@@ -423,19 +457,22 @@ def runLocal(rdfModule, fileList, output, batch):
                 break
         tt=tf.Get("events")
         nevents_local+=tt.GetEntries()
+
+    # adjust number of events in case --nevents was specified
+    if args.nevents > 0:
+      nevents_local = args.nevents
     print ("----> nevents original={}  local={}".format(nevents_meta,nevents_local))
     outFile = getElement(rdfModule,"outputDir")
     if outFile!="" and outFile[-1]!="/": outFile+="/"
 
-    if batch==False:
-        outFile+=output
+    if args.batch == False:
+        outFile+=args.output
     else:
-        outFile=output
+        outFile=args.output
     start_time = time.time()
     #run RDF
-    runRDF(rdfModule, fileListRoot, outFile, nevents_local)
+    runRDF(rdfModule, fileListRoot, outFile, nevents_local, args)
 
-    elapsed_time = time.time() - start_time
     outf = ROOT.TFile( outFile, "update" )
     outt = outf.Get("events")
     outn = outt.GetEntries()
@@ -458,6 +495,32 @@ def runLocal(rdfModule, fileList, output, batch):
     print  (" ")
     print  (" ")
 
+    if args.bench:
+        import json
+
+        analysis_path = args.pathToAnalysisScript.rsplit('/', 1)[0]
+        analysis_name = getElement(rdfModule, 'analysisName')
+        if not analysis_name:
+            analysis_name = analysis_path
+
+        bench_time = {}
+        bench_time['name'] = 'Time spent running the analysis: '
+        bench_time['name'] += analysis_name
+        bench_time['unit'] = 'Seconds'
+        bench_time['value'] = elapsed_time
+        bench_time['range'] = 10
+        bench_time['extra'] = 'Analysis path: ' + analysis_path
+        saveBenchmark('benchmarks_smaller_better.json', bench_time)
+
+        bench_evt_per_sec = {}
+        bench_evt_per_sec['name'] = 'Events processed per second: '
+        bench_evt_per_sec['name'] += analysis_name
+        bench_evt_per_sec['unit'] = 'Evt/s'
+        bench_evt_per_sec['value'] = nevents_local / elapsed_time
+        bench_time['range'] = 1000
+        bench_time['extra'] = 'Analysis path: ' + analysis_path
+        saveBenchmark('benchmarks_bigger_better.json', bench_evt_per_sec)
+
 
 #__________________________________________________________
 def runStages(args, rdfModule, preprocess):
@@ -477,7 +540,7 @@ def runStages(args, rdfModule, preprocess):
         path, filename = os.path.split(args.output)
         if path!='': os.system("mkdir -p {}".format(path))
         testFile = getElement(rdfModule,"testFile")
-        runLocal(rdfModule, [testFile], args.output, True)
+        runLocal(rdfModule, [testFile], args)
         sys.exit(0)
 
     #check if files are specified, and if so run the analysis on it/them (this will exit after)
@@ -485,7 +548,7 @@ def runStages(args, rdfModule, preprocess):
         print("----> Running with user defined list of files (either locally or from batch)")
         path, filename = os.path.split(args.output)
         if path!='': os.system("mkdir -p {}".format(path))
-        runLocal(rdfModule, args.files_list, args.output, True)
+        runLocal(rdfModule, args.files_list, args)
         sys.exit(0)
 
     #check if batch mode and set start and end file from original list
@@ -533,7 +596,8 @@ def runStages(args, rdfModule, preprocess):
             #run locally
             if runBatch == False:
                 print ('----> Running Locally')
-                runLocal(rdfModule, chunkList[ch], outputchunk, args.batch)
+                args.output = outputchunk
+                runLocal(rdfModule, chunkList[ch], args)
 
             #run on batch
         if runBatch == True:
@@ -752,42 +816,85 @@ def runPlots(analysisFile):
     dp.run(analysisFile)
 
 #__________________________________________________________
-if __name__ == "__main__":
-    #check the arguments
-    if len(sys.argv)<2:
-        print ("usage:")
-        print ("python ",sys.argv[0]," PATHTO/analysis.py <options>")
-        print ("python ",sys.argv[0]," --help for help")
-        sys.exit(3)
+def runValidate(jobdir):
+    listdir=os.listdir(jobdir)
+    if jobdir[-1]!="/":jobdir+="/"
+    for dir in listdir:
+        if not os.path.isdir(jobdir+dir): continue
+        listfile=glob.glob(jobdir+dir+"/*.sh")
+        for file in listfile:
+            with open(file) as f:
+                for line in f:
+                    pass
+                lastLine = line
+            print(line)
 
-    import argparse
-    parser = argparse.ArgumentParser()
+
+#__________________________________________________________
+def setup_run_parser(parser):
     publicOptions = parser.add_argument_group('User options')
+    publicOptions.add_argument("pathToAnalysisScript", help="path to analysis script")
     publicOptions.add_argument("--files-list", help="Specify input file to bypass the processList", default=[], nargs='+')
     publicOptions.add_argument("--output", help="Specify output file name to bypass the processList and or outputList, default output.root", type=str, default="output.root")
+    publicOptions.add_argument("--nevents", help="Specify max number of events to process", type=int, default=-1)
     publicOptions.add_argument("--test", action='store_true', help="Run over the test file", default=False)
+    publicOptions.add_argument('--bench', action='store_true', help='Output benchmark results to a JSON file', default=False)
     publicOptions.add_argument("--final", action='store_true', help="Run final analysis (produces final histograms and trees)", default=False)
     publicOptions.add_argument("--plots", action='store_true', help="Run analysis plots", default=False)
     publicOptions.add_argument("--preprocess", action='store_true', help="Run preprocessing", default=False)
+    publicOptions.add_argument("--validate", action='store_true', help="Validate a given production", default=False)
+    publicOptions.add_argument("--rerunfailed", action='store_true', help="Rerun failed jobs", default=False)
+    publicOptions.add_argument("--jobdir", help="Specify the batch job directory", type=str, default="output.root")
+    publicOptions.add_argument("--eloglevel", help="Specify the RDataFrame ELogLevel", type=str, default="kUnset", choices = ['kUnset','kFatal','kError','kWarning','kInfo','kDebug'])
 
     internalOptions = parser.add_argument_group('\033[4m\033[1m\033[91m Internal options, NOT FOR USERS\033[0m')
     internalOptions.add_argument("--batch", action='store_true', help="Submit on batch", default=False)
 
-    args, _ = parser.parse_known_args()
+
+#__________________________________________________________
+def run(mainparser, subparser=None):
+    """
+    Set things in motion.
+    The two parser arguments are a hack to allow running this
+    both as `fccanalysis run` and `python config/FCCAnalysisRun.py`
+    For the latter case, both are the same (see below).
+    """
+
+    if subparser:
+        print("===================setup subparser")
+        setup_run_parser(subparser)
+    args, _ = mainparser.parse_known_args()
+    print("args in mains code==============================",args)
     #check that the analysis file exists
-    analysisFile = sys.argv[1]
+    analysisFile = args.pathToAnalysisScript
     if not os.path.isfile(analysisFile):
-        print(sys.argv[1], " does not exist")
-        print("syntax should be: ")
-        print("python config/FCCAnalysisRun.py analysis.py <options>")
+        print("Script ", analysisFile, " does not exist")
+        print("specify a valid analysis script in the command line arguments")
         sys.exit(3)
 
+    #set the RDF ELogLevel
+    try:
+        verbosity = ROOT.Experimental.RLogScopedVerbosity(ROOT.Detail.RDF.RDFLogChannel(), getattr(ROOT.Experimental.ELogLevel,args.eloglevel))
+    except AttributeError:
+        pass
     #load the analysis
     analysisFile=os.path.abspath(analysisFile)
+    print ("--------------loading analysis file  ",analysisFile)
     rdfSpec   = importlib.util.spec_from_file_location("rdfanalysis", analysisFile)
     rdfModule = importlib.util.module_from_spec(rdfSpec)
     rdfSpec.loader.exec_module(rdfModule)
 
+    try:
+        args.command
+        if args.command == "run":          runStages(args, rdfModule, args.preprocess)
+        elif args.command == "final":  runFinal(rdfModule)
+        elif args.command == "plots":  runPlots(analysisFile)
+        return
+    except AttributeError:
+        print("============running the old way")
+
+
+    #below is legacy using the old way of runnig with options in "python config/FCCAnalysisRun.py analysis.py --options
     #check if this is final analysis
     if args.final:
         if args.plots:
@@ -807,6 +914,9 @@ if __name__ == "__main__":
             sys.exit(3)
         runPlots(analysisFile)
 
+    elif args.validate:
+        runValidate(args.jobdir)
+
     else:
         if args.preprocess:
             if args.plots:
@@ -816,3 +926,14 @@ if __name__ == "__main__":
                 print ('----> Can not have --final with --preprocess, exit')
                 sys.exit(3)
         runStages(args, rdfModule, args.preprocess)
+
+
+#__________________________________________________________
+if __name__ == "__main__":
+    print("Running this script directly is deprecated, use `fccanalysis run` instead.")
+    # legacy behavior: allow running this script directly
+    # with python config/FCCAnalysis.py
+    # and the same behavior as `fccanalysis run`
+    import argparse
+    parser = argparse.ArgumentParser()
+    run(parser, parser)
