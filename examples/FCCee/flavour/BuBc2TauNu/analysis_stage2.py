@@ -1,4 +1,4 @@
-runTraining=False
+runTraining=True
 
 #TRAINING
 processList_training = {
@@ -13,42 +13,42 @@ outputDir_training  = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc
 
 #analysis_stage1
 processList_analysis = {
-    'p8_ee_Zbb_ecm91':{},
-    'p8_ee_Zcc_ecm91':{},
-    'p8_ee_Zuds_ecm91':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{},
+#    'p8_ee_Zbb_ecm91':{},
+#    'p8_ee_Zcc_ecm91':{},
+#    'p8_ee_Zuds_ecm91':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{},
     'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0TauNu':{},
 
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{}
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{}
     }
 inputDir_analysis   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_stage1/"
 outputDir_analysis  = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_stage2/"
@@ -66,7 +66,11 @@ if runTraining:
     MVA2Filter    = "1"
 
 nCPUS       = 8
-
+#runBatch    = True
+#batchQueue  = "workday"
+#compGroup   = "group_u_FCC.local_gen"
+#if runBatch:
+#  outputDirEos = outputDir_analysis
 
 import ROOT
 ROOT.gInterpreter.ProcessLine('''
@@ -144,6 +148,7 @@ class RDFanalysis():
                .Define("EVT_DVmass_min", "myFinalSel::get_min(Vertex_mass, Vertex_isPV, LOCAL_CandVtxInd)")
                .Define("EVT_DVmass_max", "myFinalSel::get_max(Vertex_mass, Vertex_isPV, LOCAL_CandVtxInd)")
                .Define("EVT_DVmass_ave", "myFinalSel::get_ave(Vertex_mass, Vertex_isPV, LOCAL_CandVtxInd)")
+               .Define("EVT_DVmass_Dmeson", "myFinalSel::get_closest_to(Vertex_mass, Vertex_isPV, LOCAL_CandVtxInd, 1.865)")
                .Define("EVT_PVmass", "Vertex_mass.at(0)")
 
                .Define("MVAVec1Bis", ROOT.computeModel1, ("EVT_ThrustEmin_E",        "EVT_ThrustEmax_E",
@@ -229,7 +234,7 @@ class RDFanalysis():
 
                 "EVT_DVd0_min", "EVT_DVd0_max", "EVT_DVd0_ave",
                 "EVT_DVz0_min", "EVT_DVz0_max", "EVT_DVz0_ave",
-                "EVT_DVmass_min", "EVT_DVmass_max", "EVT_DVmass_ave",
+                "EVT_DVmass_min", "EVT_DVmass_max", "EVT_DVmass_ave", "EVT_DVmass_Dmeson"
                 "EVT_PVmass",
                 "EVT_Nominal_B_E",
                 "MCVertex_PDG","MCVertex_PDGmother","MCVertex_PDGgmother","MCVertex_n","MCVertex_nmother","MCVertex_ngmother",

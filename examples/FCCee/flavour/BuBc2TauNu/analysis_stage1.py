@@ -1,4 +1,4 @@
-runTraining=False
+runTraining=True
 
 #TRAINING
 processList_training = {

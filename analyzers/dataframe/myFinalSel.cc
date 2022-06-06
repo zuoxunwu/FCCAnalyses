@@ -125,3 +125,18 @@ float myFinalSel::get_ave(ROOT::VecOps::RVec<float> in,
   return -999999.;
 }
 
+float myFinalSel::get_closest_to(ROOT::VecOps::RVec<float> in,
+                                 ROOT::VecOps::RVec<int> ispv,
+                                 int index,
+                                 float target){
+
+  float distance = 9999999.;
+  float value =   -9999999.;
+  for (size_t i = 0; i < in.size(); ++i){
+    if (ispv.at(i)>0)continue;
+    if (index==i)continue;
+    if (abs(in.at(i)-target)<distance)value=in.at(i);
+  }
+  return value; 
+}
+
