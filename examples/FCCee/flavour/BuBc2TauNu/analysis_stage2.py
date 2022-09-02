@@ -15,7 +15,7 @@ outputDir_training  = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc
 processList_analysis = {
     'p8_ee_Zbb_ecm91':{},
     'p8_ee_Zcc_ecm91':{},
-    'p8_ee_Zuds_ecm91':{},
+    'p8_ee_Zuds_ecm91':{}
     'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{},
     'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{},
     'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{},
@@ -66,12 +66,16 @@ if runTraining:
     MVA2Filter    = "1"
 
 nCPUS       = 8
-
+#runBatch    = True
+#batchQueue  = "workday"
+#compGroup   = "group_u_FCC.local_gen"
+#if runBatch:
+#  outputDirEos = outputDir_analysis
 
 import ROOT
 ROOT.gInterpreter.ProcessLine('''
-TMVA::Experimental::RBDT<> bdt("BuBc_BDT2", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_stage2_Bu_vs_Bc_vs_qq_multi.root");
-computeModel = TMVA::Experimental::Compute<21, float>(bdt);
+TMVA::Experimental::RBDT<> bdt2("BuBc_BDT2", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_stage2_Bu_vs_Bc_vs_qq_multi.root");
+computeModel = TMVA::Experimental::Compute<21, float>(bdt2);
 
 TMVA::Experimental::RBDT<> bdt1("BuBc_BDT", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_BuBc_vtx.root");
 computeModel1 = TMVA::Experimental::Compute<18, float>(bdt1);
@@ -144,6 +148,12 @@ class RDFanalysis():
                .Define("EVT_DVmass_min", "myFinalSel::get_min(Vertex_mass, Vertex_isPV, LOCAL_CandVtxInd)")
                .Define("EVT_DVmass_max", "myFinalSel::get_max(Vertex_mass, Vertex_isPV, LOCAL_CandVtxInd)")
                .Define("EVT_DVmass_ave", "myFinalSel::get_ave(Vertex_mass, Vertex_isPV, LOCAL_CandVtxInd)")
+               .Define("EVT_DVmass_Dmeson", "myFinalSel::get_closest_to(Vertex_mass, Vertex_isPV, LOCAL_CandVtxInd, 1.865)")
+               .Define("EVT_DVmass_Dmeson_Emin", "myFinalSel::get_closest_to(Vertex_mass,  Vertex_isPV * Vertex_thrusthemis_emin, LOCAL_CandVtxInd, 1.865)")
+               .Define("EVT_d2PVx_Dmeson_Emin",  "myFinalSel::get_closest_to(Vertex_d2PVx, Vertex_isPV * Vertex_thrusthemis_emin, LOCAL_CandVtxInd, 1.865)")
+               .Define("EVT_d2PVy_Dmeson_Emin",  "myFinalSel::get_closest_to(Vertex_d2PVy, Vertex_isPV * Vertex_thrusthemis_emin, LOCAL_CandVtxInd, 1.865)")
+               .Define("EVT_d2PVz_Dmeson_Emin",  "myFinalSel::get_closest_to(Vertex_d2PVz, Vertex_isPV * Vertex_thrusthemis_emin, LOCAL_CandVtxInd, 1.865)")
+               .Define("EVT_d2PVd0_Dmeson_Emin", "sqrt(EVT_d2PVx_Dmeson_Emin*EVT_d2PVx_Dmeson_Emin + EVT_d2PVy_Dmeson_Emin*EVT_d2PVy_Dmeson_Emin)")
                .Define("EVT_PVmass", "Vertex_mass.at(0)")
 
                .Define("MVAVec1Bis", ROOT.computeModel1, ("EVT_ThrustEmin_E",        "EVT_ThrustEmax_E",
@@ -229,7 +239,8 @@ class RDFanalysis():
 
                 "EVT_DVd0_min", "EVT_DVd0_max", "EVT_DVd0_ave",
                 "EVT_DVz0_min", "EVT_DVz0_max", "EVT_DVz0_ave",
-                "EVT_DVmass_min", "EVT_DVmass_max", "EVT_DVmass_ave",
+                "EVT_DVmass_min", "EVT_DVmass_max", "EVT_DVmass_ave", "EVT_DVmass_Dmeson", "EVT_DVmass_Dmeson_Emin",
+                "EVT_d2PVx_Dmeson_Emin", "EVT_d2PVy_Dmeson_Emin", "EVT_d2PVz_Dmeson_Emin", "EVT_d2PVd0_Dmeson_Emin", 
                 "EVT_PVmass",
                 "EVT_Nominal_B_E",
                 "MCVertex_PDG","MCVertex_PDGmother","MCVertex_PDGgmother","MCVertex_n","MCVertex_nmother","MCVertex_ngmother",

@@ -1,71 +1,20 @@
-runTraining=True
 
-#TRAINING
-processList_training = {
-    'p8_ee_Zbb_ecm91':{'chunks':50},
-    'p8_ee_Zcc_ecm91':{'chunks':50},
-    'p8_ee_Zuds_ecm91':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50}
-}
-prodTag_training     = "FCCee/spring2021_training/IDEA/"
-outputDirEos_training   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/training_stage1/"
-
-#analysis_stage1
+#analysis_extra
 processList_analysis = {
     'p8_ee_Zbb_ecm91':{'chunks':50},
     'p8_ee_Zcc_ecm91':{'chunks':50},
-    'p8_ee_Zuds_ecm91':{'chunks':50},
+    'p8_ee_Zuds_ecm91':{'chunks':50}
 
-    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0TauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50}
     }
 prodTag_analysis     = "FCCee/spring2021/IDEA/"
-outputDirEos_analysis   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_stage1/"
+outputDirEos_analysis   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_extra_bkg_composition/"
 
 
 processList  = processList_analysis
 outputDirEos = outputDirEos_analysis
 prodTag      = prodTag_analysis
 MVAFilter    = "EVT_MVA1>0.6"
-
-if runTraining:
-    processList  = processList_training
-    outputDirEos = outputDirEos_training
-    prodTag      = prodTag_training
-    MVAFilter    = "EVT_MVA1>-1.0"
+MVA2Filter   = "EVT_MVA2_bu>0.6||EVT_MVA2_bc>0.6"
 
 outputDir   = ""
 nCPUS       = 8
@@ -75,8 +24,11 @@ compGroup   = "group_u_FCC.local_gen"
 
 import ROOT
 ROOT.gInterpreter.ProcessLine('''
-TMVA::Experimental::RBDT<> bdt("BuBc_BDT", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_BuBc_vtx.root");
-computeModel1 = TMVA::Experimental::Compute<18, float>(bdt);
+TMVA::Experimental::RBDT<> bdt2("BuBc_BDT2", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_stage2_Bu_vs_Bc_vs_qq_multi.root");
+computeModel = TMVA::Experimental::Compute<21, float>(bdt2);
+
+TMVA::Experimental::RBDT<> bdt1("BuBc_BDT", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_BuBc_vtx.root");
+computeModel1 = TMVA::Experimental::Compute<18, float>(bdt1);
 ''')
 
 #Mandatory: RDFanalysis class where the use defines the operations on the TTree
@@ -98,13 +50,19 @@ class RDFanalysis():
                #############################################
                ##MC record to study the Z->bb events types##
                #############################################
-               .Define("MC_PDG", "FCCAnalyses::MCParticle::get_pdg(Particle)")
-               .Define("MC_n",   "int(MC_PDG.size())")
-               .Define("MC_M1",  "myUtils::get_MCMother1(Particle,Particle0)")
-               .Define("MC_M2",  "myUtils::get_MCMother2(Particle,Particle0)")
-               .Define("MC_D1",  "myUtils::get_MCDaughter1(Particle,Particle1)")
-               .Define("MC_D2",  "myUtils::get_MCDaughter2(Particle,Particle1)")
-
+               .Define("MC_PDG",   "FCCAnalyses::MCParticle::get_pdg(Particle)")
+               .Define("MC_n",     "int(MC_PDG.size())")
+               .Define("MC_M1",    "myUtils::get_MCMother1(Particle,Particle0)")
+               .Define("MC_M2",    "myUtils::get_MCMother2(Particle,Particle0)")
+               .Define("MC_D1",    "myUtils::get_MCDaughter1(Particle,Particle1)")
+               .Define("MC_D2",    "myUtils::get_MCDaughter2(Particle,Particle1)")
+               .Define("MC_px",    "FCCAnalyses::MCParticle::get_px(Particle)")
+               .Define("MC_py",    "FCCAnalyses::MCParticle::get_py(Particle)")
+               .Define("MC_pz",    "FCCAnalyses::MCParticle::get_pz(Particle)")
+               .Define("MC_mass",  "FCCAnalyses::MCParticle::get_mass(Particle)")
+               .Define("MC_fromvert_x", "FCCAnalyses::MCParticle::get_vertex_x(Particle)")
+               .Define("MC_fromvert_y", "FCCAnalyses::MCParticle::get_vertex_y(Particle)")
+               .Define("MC_fromvert_z", "FCCAnalyses::MCParticle::get_vertex_z(Particle)")
 
                #############################################
                ##               Build MC Vertex           ##
@@ -248,7 +206,6 @@ class RDFanalysis():
                .Define("EVT_ThrustEmin_NDV", "float(myUtils::get_Npos(DVertex_thrust_angle))")
                .Define("EVT_ThrustEmax_NDV", "float(myUtils::get_Nneg(DVertex_thrust_angle))")
 
-               .Define("EVT_Thrust_Mag",  "EVT_thrust.at(0)")
                .Define("EVT_Thrust_X",    "EVT_thrust.at(1)")
                .Define("EVT_Thrust_XErr", "EVT_thrust.at(2)")
                .Define("EVT_Thrust_Y",    "EVT_thrust.at(3)")
@@ -256,6 +213,12 @@ class RDFanalysis():
                .Define("EVT_Thrust_Z",    "EVT_thrust.at(5)")
                .Define("EVT_Thrust_ZErr", "EVT_thrust.at(6)")
 
+
+               ######################################################
+               ### save which hemisphere gen particles belong to  ###
+               ######################################################
+               .Define("MC_p_thrust_angle",    "FCCAnalyses::Algorithms::getAxisCosTheta(EVT_thrust, MC_px, MC_py, MC_pz)")
+               .Define("MC_vert_thrust_angle", "FCCAnalyses::Algorithms::getAxisCosTheta(EVT_thrust, MC_fromvert_x, MC_fromvert_y, MC_fromvertz)")
 
                .Define("DV_tracks", "myUtils::get_pseudotrack(VertexObject,RecoPartPIDAtVertex)")
 
@@ -283,7 +246,6 @@ class RDFanalysis():
                .Define("Tau23PiCandidates_py",      "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates,1)")
                .Define("Tau23PiCandidates_pz",      "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates,2)")
                .Define("Tau23PiCandidates_p",       "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates,-1)")
-               .Define("Tau23PiCandidates_B",       "myUtils::getFCCAnalysesComposite_B(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex)")
 
                .Define("Tau23PiCandidates_track",   "myUtils::getFCCAnalysesComposite_track(Tau23PiCandidates, VertexObject)")
                .Define("Tau23PiCandidates_d0",      "myUtils::get_trackd0(Tau23PiCandidates_track)")
@@ -296,39 +258,6 @@ class RDFanalysis():
                .Define("Tau23PiCandidates_rho",     "myUtils::build_rho(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex)")
                .Define("Tau23PiCandidates_rho1mass","myUtils::get_mass(Tau23PiCandidates_rho, 0)")
                .Define("Tau23PiCandidates_rho2mass","myUtils::get_mass(Tau23PiCandidates_rho, 1)")
-               .Define("Tau23PiCandidates_rho1px",  "myUtils::get_px(Tau23PiCandidates_rho, 0)")
-               .Define("Tau23PiCandidates_rho2px",  "myUtils::get_px(Tau23PiCandidates_rho, 1)")
-
-               .Define("Tau23PiCandidates_rho1py",  "myUtils::get_py(Tau23PiCandidates_rho, 0)")
-               .Define("Tau23PiCandidates_rho2py",  "myUtils::get_py(Tau23PiCandidates_rho, 1)")
-
-               .Define("Tau23PiCandidates_rho1pz",  "myUtils::get_pz(Tau23PiCandidates_rho, 0)")
-               .Define("Tau23PiCandidates_rho2pz",  "myUtils::get_pz(Tau23PiCandidates_rho, 1)")
-
-               .Define("Tau23PiCandidates_pion1px", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 0, 0)")
-               .Define("Tau23PiCandidates_pion1py", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 0, 1)")
-               .Define("Tau23PiCandidates_pion1pz", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 0, 2)")
-               .Define("Tau23PiCandidates_pion1p",  "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 0, -1)")
-               .Define("Tau23PiCandidates_pion1q",  "myUtils::getFCCAnalysesComposite_q(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 0)")
-               .Define("Tau23PiCandidates_pion1d0", "myUtils::getFCCAnalysesComposite_d0(Tau23PiCandidates, VertexObject, 0)")
-               .Define("Tau23PiCandidates_pion1z0", "myUtils::getFCCAnalysesComposite_z0(Tau23PiCandidates, VertexObject, 0)")
-
-               .Define("Tau23PiCandidates_pion2px", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 1, 0)")
-               .Define("Tau23PiCandidates_pion2py", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 1, 1)")
-               .Define("Tau23PiCandidates_pion2pz", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 1, 2)")
-               .Define("Tau23PiCandidates_pion2p",  "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 1, -1)")
-               .Define("Tau23PiCandidates_pion2q",  "myUtils::getFCCAnalysesComposite_q(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 1)")
-               .Define("Tau23PiCandidates_pion2d0", "myUtils::getFCCAnalysesComposite_d0(Tau23PiCandidates, VertexObject, 1)")
-               .Define("Tau23PiCandidates_pion2z0", "myUtils::getFCCAnalysesComposite_z0(Tau23PiCandidates, VertexObject, 1)")
-
-               .Define("Tau23PiCandidates_pion3px", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 2, 0)")
-               .Define("Tau23PiCandidates_pion3py", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 2, 1)")
-               .Define("Tau23PiCandidates_pion3pz", "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 2, 2)")
-               .Define("Tau23PiCandidates_pion3p",  "myUtils::getFCCAnalysesComposite_p(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 2, -1)")
-               .Define("Tau23PiCandidates_pion3q",  "myUtils::getFCCAnalysesComposite_q(Tau23PiCandidates, VertexObject, RecoPartPIDAtVertex, 2)")
-               .Define("Tau23PiCandidates_pion3d0", "myUtils::getFCCAnalysesComposite_d0(Tau23PiCandidates, VertexObject, 2)")
-               .Define("Tau23PiCandidates_pion3z0", "myUtils::getFCCAnalysesComposite_z0(Tau23PiCandidates, VertexObject, 2)")
-
 
                .Define("TrueTau23PiBc_vertex",        "myUtils::get_trueVertex(MCVertexObject,Particle,Particle0, 15, 541)")
                .Define("TrueTau23PiBc_track",         "myUtils::get_truetrack(TrueTau23PiBc_vertex, MCVertexObject, Particle)")
@@ -336,6 +265,66 @@ class RDFanalysis():
                .Define("TrueTau23PiBc_z0",            "myUtils::get_trackz0(TrueTau23PiBc_track)")
 
                .Define("TrueTau23PiBu_vertex",        "myUtils::get_trueVertex(MCVertexObject,Particle,Particle0, 15, 521)")
+
+
+               .Define("CUT_CandInd",     "myFinalSel::selTauCand(Tau23PiCandidates_mass, Tau23PiCandidates_vertex, Vertex_chi2 )")
+               .Filter("CUT_CandInd>-1")
+
+               .Define("CUT_CandTruth",   "myFinalSel::selTauCandTM(Tau23PiCandidates_mcvertex, TrueTau23PiBc_vertex, CUT_CandInd)")
+               .Define("CUT_CandTruth2",   "myFinalSel::selTauCandTM(Tau23PiCandidates_mcvertex, TrueTau23PiBu_vertex, CUT_CandInd)")
+
+               .Define("CUT_CandRho",      "if ((Tau23PiCandidates_rho1mass.at(CUT_CandInd)<1. && Tau23PiCandidates_rho2mass.at(CUT_CandInd)>0.6 && Tau23PiCandidates_rho2mass.at(CUT_CandInd)<1.0)|| (Tau23PiCandidates_rho2mass.at(CUT_CandInd)<1. && Tau23PiCandidates_rho1mass.at(CUT_CandInd)>0.6 && Tau23PiCandidates_rho1mass.at(CUT_CandInd)<1.)) return 1; else return 0;")
+               .Filter("CUT_CandRho>0")
+
+               .Define("EVT_CandMass",     "Tau23PiCandidates_mass.at(CUT_CandInd)")
+               .Filter("EVT_CandMass<1.8")
+
+               .Define("LOCAL_CandVtxInd", "Tau23PiCandidates_vertex.at(CUT_CandInd)")
+               ##LOCAL INDEX screwed up in prod02!!!! need -1 because PV is removed
+               .Define("CUT_CandVtxThrustEmin", "Vertex_thrusthemis_emin.at(LOCAL_CandVtxInd)")
+               .Filter("CUT_CandVtxThrustEmin>0")
+
+               .Define("EVT_CandN",           "float(Tau23PiCandidates_vertex.size())")
+               .Define("EVT_CandPx",          "Tau23PiCandidates_px.at(CUT_CandInd)")
+               .Define("EVT_CandPy",          "Tau23PiCandidates_py.at(CUT_CandInd)")
+               .Define("EVT_CandPz",          "Tau23PiCandidates_pz.at(CUT_CandInd)")
+               .Define("EVT_CandP",           "Tau23PiCandidates_p.at(CUT_CandInd)")
+               .Define("EVT_CandD0",          "Tau23PiCandidates_d0.at(CUT_CandInd)")
+               .Define("EVT_CandZ0",          "Tau23PiCandidates_z0.at(CUT_CandInd)")
+               .Define("EVT_CandAngleThrust", "Tau23PiCandidates_anglethrust.at(CUT_CandInd)")
+
+               .Define("EVT_CandRho1Mass", "Tau23PiCandidates_rho1mass.at(CUT_CandInd)" )
+               .Define("EVT_CandRho2Mass", "Tau23PiCandidates_rho2mass.at(CUT_CandInd)")
+
+               .Define("EVT_CandVtxFD",    "Vertex_d2PV.at(LOCAL_CandVtxInd)")
+               .Define("EVT_CandVtxFDErr", "Vertex_d2PVErr.at(LOCAL_CandVtxInd)")
+               .Define("EVT_CandVtxChi2",  "Vertex_chi2.at(LOCAL_CandVtxInd)")
+
+               .Define("EVT_Nominal_B_E", "float(91.1876 - EVT_ThrustEmin_E - EVT_ThrustEmax_E + sqrt(EVT_CandP*EVT_CandP + EVT_CandMass*EVT_CandMass))")
+               .Define("EVT_DVd0_min", "myFinalSel::get_min(DV_d0, EVT_CandD0)")
+               .Define("EVT_DVd0_max", "myFinalSel::get_max(DV_d0, EVT_CandD0)")
+               .Define("EVT_DVd0_ave", "myFinalSel::get_ave(DV_d0, EVT_CandD0)")
+
+               .Define("EVT_DVz0_min", "myFinalSel::get_min(DV_z0, EVT_CandZ0)")
+               .Define("EVT_DVz0_max", "myFinalSel::get_max(DV_z0, EVT_CandZ0)")
+               .Define("EVT_DVz0_ave", "myFinalSel::get_ave(DV_z0, EVT_CandZ0)")
+
+               .Define("EVT_PVmass", "Vertex_mass.at(0)")
+
+               .Define("MVAVec", ROOT.computeModel, ("EVT_CandMass",        "EVT_CandRho1Mass", "EVT_CandRho2Mass",
+                                                     "EVT_CandN",           "EVT_CandVtxFD",    "EVT_CandVtxChi2",
+                                                     "EVT_CandPx",          "EVT_CandPy",       "EVT_CandPz",
+                                                     "EVT_CandP",           "EVT_CandD0",       "EVT_CandZ0",
+                                                     "EVT_CandAngleThrust", "EVT_DVd0_min",     "EVT_DVd0_max",
+                                                     "EVT_DVd0_ave",        "EVT_DVz0_min",     "EVT_DVz0_max",
+                                                     "EVT_DVz0_ave",        "EVT_PVmass",       "EVT_Nominal_B_E"))
+
+
+               .Define("EVT_MVA2_bkg", "MVAVec.at(0)")
+               .Define("EVT_MVA2_bu", "MVAVec.at(1)")
+               .Define("EVT_MVA2_bc", "MVAVec.at(2)")
+
+               .Filter(MVA2Filter)
            )
         return df2
 
@@ -344,15 +333,11 @@ class RDFanalysis():
     def output():
         branchList = [
                 "MC_PDG","MC_M1","MC_M2","MC_n","MC_D1","MC_D2",
+                "MC_px", "MC_py", "MC_pz", "MC_mass", 
+                "MC_fromvert_x", "MC_fromvert_y", "MC_fromvert_z",
+                "MC_p_thrust_angle", "MC_vert_thrust_angle",
 
                 "EVT_ThrustEmin_E",          "EVT_ThrustEmax_E",
-                "EVT_ThrustEmin_Echarged",   "EVT_ThrustEmax_Echarged",
-                "EVT_ThrustEmin_Eneutral",   "EVT_ThrustEmax_Eneutral",
-                "EVT_ThrustEmin_N",          "EVT_ThrustEmax_N",
-                "EVT_ThrustEmin_Ncharged",   "EVT_ThrustEmax_Ncharged",
-                "EVT_ThrustEmin_Nneutral",   "EVT_ThrustEmax_Nneutral",
-                "EVT_ThrustEmin_NDV",        "EVT_ThrustEmax_NDV",
-                "EVT_Thrust_Mag",
                 "EVT_Thrust_X",  "EVT_Thrust_XErr",
                 "EVT_Thrust_Y",  "EVT_Thrust_YErr",
                 "EVT_Thrust_Z",  "EVT_Thrust_ZErr",
@@ -372,26 +357,7 @@ class RDFanalysis():
                 "Vertex_thrust_angle", "Vertex_thrusthemis_emin", "Vertex_thrusthemis_emax",
 
                 "Vertex_d2PV", "Vertex_d2PVx", "Vertex_d2PVy", "Vertex_d2PVz",
-                "Vertex_d2PVErr", "Vertex_d2PVxErr", "Vertex_d2PVyErr", "Vertex_d2PVzErr",
                 "Vertex_mass",
-                "DV_d0","DV_z0",
-                "EVT_MVA1",
-
-                "TrueTau23PiBc_vertex","TrueTau23PiBc_d0","TrueTau23PiBc_z0",
-                "TrueTau23PiBu_vertex",
-
-                "Tau23PiCandidates_mass", "Tau23PiCandidates_vertex", "Tau23PiCandidates_mcvertex", "Tau23PiCandidates_B",
-                "Tau23PiCandidates_px", "Tau23PiCandidates_py", "Tau23PiCandidates_pz", "Tau23PiCandidates_p", "Tau23PiCandidates_q",
-                "Tau23PiCandidates_d0",  "Tau23PiCandidates_z0","Tau23PiCandidates_anglethrust",
-
-                "Tau23PiCandidates_rho1px", "Tau23PiCandidates_rho1py", "Tau23PiCandidates_rho1pz","Tau23PiCandidates_rho1mass",
-                "Tau23PiCandidates_rho2px", "Tau23PiCandidates_rho2py", "Tau23PiCandidates_rho2pz","Tau23PiCandidates_rho2mass",
-
-                "Tau23PiCandidates_pion1px", "Tau23PiCandidates_pion1py", "Tau23PiCandidates_pion1pz",
-                "Tau23PiCandidates_pion1p", "Tau23PiCandidates_pion1q", "Tau23PiCandidates_pion1d0", "Tau23PiCandidates_pion1z0",
-                "Tau23PiCandidates_pion2px", "Tau23PiCandidates_pion2py", "Tau23PiCandidates_pion2pz",
-                "Tau23PiCandidates_pion2p", "Tau23PiCandidates_pion2q", "Tau23PiCandidates_pion2d0", "Tau23PiCandidates_pion2z0",
-                "Tau23PiCandidates_pion3px", "Tau23PiCandidates_pion3py", "Tau23PiCandidates_pion3pz",
-                "Tau23PiCandidates_pion3p", "Tau23PiCandidates_pion3q", "Tau23PiCandidates_pion3d0", "Tau23PiCandidates_pion3z0",
+                "EVT_MVA1", "EVT_MVA2_bkg", "EVT_MVA2_bu", "EVT_MVA2_bc"
                 ]
         return branchList

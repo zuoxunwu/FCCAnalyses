@@ -37,6 +37,10 @@ namespace myFinalSel{
 		ROOT::VecOps::RVec<int> ispv,
 		int index);
 
+  float get_closest_to(ROOT::VecOps::RVec<float> in,
+                       ROOT::VecOps::RVec<int> ispv,
+                       int index,
+                       float target);
 }//end NS myFinalSel
 
 }//end NS FCCAnalyses
