@@ -1,4 +1,4 @@
-runTraining=True
+runTraining=False
 
 #TRAINING
 processList_training = {
@@ -13,43 +13,43 @@ outputDirEos_training   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/
 
 #analysis_stage1
 processList_analysis = {
-    'p8_ee_Zbb_ecm91':{'chunks':50},
-    'p8_ee_Zcc_ecm91':{'chunks':50},
-    'p8_ee_Zuds_ecm91':{'chunks':50},
+#    'p8_ee_Zbb_ecm91':{'chunks':50},
+#    'p8_ee_Zcc_ecm91':{'chunks':50},
+#    'p8_ee_Zuds_ecm91':{'chunks':50},
 
-    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50},
 
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0TauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{'chunks':50},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{'chunks':50},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0TauNu':{'chunks':50},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{'chunks':50},
     'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50}
     }
 prodTag_analysis     = "FCCee/spring2021/IDEA/"
@@ -210,7 +210,7 @@ class RDFanalysis():
 
                .Define("EVT_thrustNP",      'Algorithms::minimize_thrust("Minuit2","Migrad")(RP_px, RP_py, RP_pz)')
                .Define("RP_thrustangleNP",  'Algorithms::getAxisCosTheta(EVT_thrustNP, RP_px, RP_py, RP_pz)')
-               .Define("EVT_thrust",        'Algorithms::getThrustPointing(RP_thrustangleNP, RP_e, EVT_thrustNP, 1.)')
+               .Define("EVT_thrust",        'Algorithms::getThrustPointing(1.)(RP_thrustangleNP, RP_e, EVT_thrustNP)')
                .Define("RP_thrustangle",    'Algorithms::getAxisCosTheta(EVT_thrust, RP_px, RP_py, RP_pz)')
 
 
