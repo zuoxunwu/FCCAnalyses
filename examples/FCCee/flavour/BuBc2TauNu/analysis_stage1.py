@@ -1,4 +1,4 @@
-runTraining=False
+runTraining=True
 
 #TRAINING
 processList_training = {
@@ -13,44 +13,73 @@ outputDirEos_training   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/
 
 #analysis_stage1
 processList_analysis = {
-#    'p8_ee_Zbb_ecm91':{'chunks':50},
-#    'p8_ee_Zcc_ecm91':{'chunks':50},
-#    'p8_ee_Zuds_ecm91':{'chunks':50},
+    'p8_ee_Zbb_ecm91':{'chunks':50},
+    'p8_ee_Zcc_ecm91':{'chunks':50},
+    'p8_ee_Zuds_ecm91':{'chunks':50},
 
-#    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50},
 
-#    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{'chunks':50},
-#
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{'chunks':50},
-#
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0TauNu':{'chunks':50},
-#
-#    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{'chunks':50},
-#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50}
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{'chunks':50},
+
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{'chunks':50},
+
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0TauNu':{'chunks':50},
+
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50},
+
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0ENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0MuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0ENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0MuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstMuNu':{'chunks':50},
+
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2K3Pi':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2TauNu':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2TauNuTAUHADNU':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2EtapRho':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNu':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNuTAUHADNU':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LENu':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LMuNu':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LRhoPi':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2Sigma2Pi':{'chunks':50}
+
     }
 prodTag_analysis     = "FCCee/spring2021/IDEA/"
 outputDirEos_analysis   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_stage1/"
