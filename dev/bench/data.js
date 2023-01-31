@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675174054169,
+  "lastUpdate": 1675174056414,
   "repoUrl": "https://github.com/zuoxunwu/FCCAnalyses",
   "entries": {
     "Benchmark": [
@@ -1137,6 +1137,45 @@ window.BENCHMARK_DATA = {
             "unit": "Seconds",
             "range": 10,
             "extra": "Analysis path: examples/FCCee/test"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zuoxunwu@gmail.com",
+            "name": "Xunwu Zuo",
+            "username": "zuoxunwu"
+          },
+          "committer": {
+            "email": "zuoxunwu@gmail.com",
+            "name": "Xunwu Zuo",
+            "username": "zuoxunwu"
+          },
+          "distinct": true,
+          "id": "6825ea74da94fc010cdc1949eed1850ef9dcb6a5",
+          "message": "final version of BuBc stage1/2",
+          "timestamp": "2023-01-31T14:53:02+01:00",
+          "tree_id": "77fd0a36c792b22fc251746c4bca9fe35f2d5217",
+          "url": "https://github.com/zuoxunwu/FCCAnalyses/commit/6825ea74da94fc010cdc1949eed1850ef9dcb6a5"
+        },
+        "date": 1675174055567,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "prod | Events processed per second: examples/FCCee/higgs/mH-recoil/mumu",
+            "value": 5.549249412571701,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "prod | Events processed per second: examples/FCCee/flavour/Bc2TauNu",
+            "value": 4.274252482175779,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "prod | Events processed per second: examples/FCCee/test",
+            "value": 5.712774948739597,
+            "unit": "Evt/s"
           }
         ]
       }
