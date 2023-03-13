@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678736440030,
+  "lastUpdate": 1678736441945,
   "repoUrl": "https://github.com/zuoxunwu/FCCAnalyses",
   "entries": {
     "Benchmark": [
@@ -1221,6 +1221,45 @@ window.BENCHMARK_DATA = {
             "unit": "Seconds",
             "range": 10,
             "extra": "Analysis path: examples/FCCee/test"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zuoxunwu@gmail.com",
+            "name": "Xunwu Zuo",
+            "username": "zuoxunwu"
+          },
+          "committer": {
+            "email": "zuoxunwu@gmail.com",
+            "name": "Xunwu Zuo",
+            "username": "zuoxunwu"
+          },
+          "distinct": true,
+          "id": "7936a9960c50db086579e741f9ef76e0d525da3c",
+          "message": "BuBc: Add a independent stage to study background composition",
+          "timestamp": "2023-03-13T20:30:55+01:00",
+          "tree_id": "df29787da845182aa622b3f13c7a14acf6294c2a",
+          "url": "https://github.com/zuoxunwu/FCCAnalyses/commit/7936a9960c50db086579e741f9ef76e0d525da3c"
+        },
+        "date": 1678736441319,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "nightly | Events processed per second: examples/FCCee/higgs/mH-recoil/mumu",
+            "value": 7.490526126674118,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "nightly | Events processed per second: examples/FCCee/flavour/Bc2TauNu",
+            "value": 6.378513783221679,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "nightly | Events processed per second: examples/FCCee/test",
+            "value": 7.583682465119171,
+            "unit": "Evt/s"
           }
         ]
       }
