@@ -41,16 +41,16 @@ processList_analysis = {
 #    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50}
 
 
-     'p8_ee_Zcc_ecm91_EvtGen_D2K3Pi':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_D2TauNu':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_D2TauNuTAUHADNU':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_Ds2EtapRho':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNu':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNuTAUHADNU':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_Lc2LENu':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_Lc2LMuNu':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_Lc2LRhoPi':{'chunks':1},
-     'p8_ee_Zcc_ecm91_EvtGen_Lc2Sigma2Pi':{'chunks':1}
+     'p8_ee_Zcc_ecm91_EvtGen_Dd2K3Pi':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Dd2TauNu':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Dd2TauNuTAUHADNU':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Ds2EtapRho':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNu':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNuTAUHADNU':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Lc2LENu':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Lc2LMuNu':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Lc2LRhoPi':{'chunks':50},
+     'p8_ee_Zcc_ecm91_EvtGen_Lc2Sigma2Pi':{'chunks':50}
 
     }
 prodTag_analysis     = "FCCee/spring2021/IDEA/"
