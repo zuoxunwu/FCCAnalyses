@@ -1,7 +1,11 @@
 var searchData=
 [
-  ['partoacts_0',['ParToACTS',['../namespace_f_c_c_analyses_1_1_vertexing_utils.html#a5f43b223d06744303442542fc44809ac',1,'FCCAnalyses::VertexingUtils']]],
-  ['partop_1',['ParToP',['../namespace_f_c_c_analyses_1_1_vertex_fitter_simple.html#ac6c87368c6b5b3dc4514805b4b557112',1,'FCCAnalyses::VertexFitterSimple']]],
-  ['pid_2',['PID',['../namespace_f_c_c_analyses_1_1my_utils.html#ac1fa7429dd12a0bc02a7407b8b336766',1,'FCCAnalyses::myUtils']]],
-  ['plus_3',['plus',['../struct_f_c_c_analyses_1_1_algorithms_1_1calculate__thrust.html#a3d005b301b597a3c26af1f97e05bb78c',1,'FCCAnalyses::Algorithms::calculate_thrust']]]
+  ['mag2_0',['mag2',['../struct_f_c_c_analyses_1_1_algorithms_1_1calculate__thrust.html#a4d88e22fe8e5a60915a3b57ab33a5bf9',1,'FCCAnalyses::Algorithms::calculate_thrust']]],
+  ['mctrackparameters_1',['mcTrackParameters',['../namespace_f_c_c_analyses_1_1_smear_objects.html#a3e3cc25372e07c5ed25f6cb926fda275',1,'FCCAnalyses::SmearObjects']]],
+  ['merge_2',['merge',['../namespace_f_c_c_analyses_1_1_reconstructed_particle.html#ab2d5b265b6346572a571bd2c38d8defe',1,'FCCAnalyses::ReconstructedParticle']]],
+  ['merge_5fvertexobjet_3',['merge_VertexObjet',['../namespace_f_c_c_analyses_1_1my_utils.html#a38f36bd8b5b44dd8e6cad72dff073890',1,'FCCAnalyses::myUtils']]],
+  ['mergeparticles_4',['mergeParticles',['../namespace_f_c_c_analyses_1_1_m_c_particle.html#ab1315bf243164c0a4fae1417fcf2b7fd',1,'FCCAnalyses::MCParticle']]],
+  ['minimize_5fsphericity_5',['minimize_sphericity',['../struct_f_c_c_analyses_1_1_algorithms_1_1minimize__sphericity.html#af1d63789d789a06799ad0f19e33ec559',1,'FCCAnalyses::Algorithms::minimize_sphericity']]],
+  ['minimize_5fthrust_6',['minimize_thrust',['../struct_f_c_c_analyses_1_1_algorithms_1_1minimize__thrust.html#a0cf23f7da89f793d34a07b3d12824685',1,'FCCAnalyses::Algorithms::minimize_thrust']]],
+  ['minus_7',['minus',['../struct_f_c_c_analyses_1_1_algorithms_1_1calculate__thrust.html#a787518d92bb7e99da7c12c6585802ebb',1,'FCCAnalyses::Algorithms::calculate_thrust']]]
 ];
