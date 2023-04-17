@@ -15,7 +15,7 @@ outputDir_training  = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc
 processList_analysis = {
     'p8_ee_Zbb_ecm91':{},
     'p8_ee_Zcc_ecm91':{},
-    'p8_ee_Zuds_ecm91':{}
+    'p8_ee_Zuds_ecm91':{},
     'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{},
     'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{},
     'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{},
@@ -48,7 +48,35 @@ processList_analysis = {
     'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{},
     'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{},
     'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{}
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{},
+
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DENu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DMuNu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstENu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstMuNu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsENu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsMuNu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstENu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstMuNu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0ENu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0MuNu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0ENu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0MuNu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcENu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcMuNu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstENu':{},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstMuNu':{},
+
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2K3Pi':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2TauNu':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2TauNuTAUHADNU':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2EtapRho':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNu':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNuTAUHADNU':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LENu':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LMuNu':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LRhoPi':{},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2Sigma2Pi':{}
     }
 inputDir_analysis   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_stage1/"
 outputDir_analysis  = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_stage2/"
@@ -58,6 +86,7 @@ outputDir    = outputDir_analysis
 inputDir     = inputDir_analysis
 MVA1Filter   = "EVT_MVA1Bis>0.6"
 MVA2Filter   = "EVT_MVA2_bu>0.6||EVT_MVA2_bc>0.6"
+#MVA2Filter   = "EVT_MVA2_bkg<0.2"
 
 if runTraining:
     processList  = processList_training
@@ -74,8 +103,8 @@ nCPUS       = 8
 
 import ROOT
 ROOT.gInterpreter.ProcessLine('''
-TMVA::Experimental::RBDT<> bdt2("BuBc_BDT2", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_stage2_Bu_vs_Bc_vs_qq_multi.root");
-computeModel = TMVA::Experimental::Compute<21, float>(bdt2);
+TMVA::Experimental::RBDT<> bdt2("BuBc_BDT2", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_stage2_Bu_vs_Bc_vs_qq_multi_final.root");
+computeModel = TMVA::Experimental::Compute<24, float>(bdt2);
 
 TMVA::Experimental::RBDT<> bdt1("BuBc_BDT", "/afs/cern.ch/work/x/xzuo/public/FCC_files/BuBc2TauNu/data/ROOT/xgb_bdt_BuBc_vtx.root");
 computeModel1 = TMVA::Experimental::Compute<18, float>(bdt1);
@@ -168,13 +197,14 @@ class RDFanalysis():
                .Define("EVT_MVA1Bis", "MVAVec1Bis.at(0)")
                .Filter(MVA1Filter)
 
-               .Define("MVAVec", ROOT.computeModel, ("EVT_CandMass",        "EVT_CandRho1Mass", "EVT_CandRho2Mass",
-                                                     "EVT_CandN",           "EVT_CandVtxFD",    "EVT_CandVtxChi2",
-                                                     "EVT_CandPx",          "EVT_CandPy",       "EVT_CandPz",
-                                                     "EVT_CandP",           "EVT_CandD0",       "EVT_CandZ0",
-                                                     "EVT_CandAngleThrust", "EVT_DVd0_min",     "EVT_DVd0_max",
-                                                     "EVT_DVd0_ave",        "EVT_DVz0_min",     "EVT_DVz0_max",
-                                                     "EVT_DVz0_ave",        "EVT_PVmass",       "EVT_Nominal_B_E"))
+               .Define("MVAVec", ROOT.computeModel, ("EVT_CandMass",            "EVT_CandRho1Mass",      "EVT_CandRho2Mass",
+                                                     "EVT_CandN",               "EVT_CandVtxFD",         "EVT_CandVtxChi2",
+                                                     "EVT_CandPx",              "EVT_CandPy",            "EVT_CandPz",
+                                                     "EVT_CandP",               "EVT_CandD0",            "EVT_CandZ0",
+                                                     "EVT_CandAngleThrust",     "EVT_DVd0_min",          "EVT_DVd0_max",
+                                                     "EVT_DVd0_ave",            "EVT_DVz0_min",          "EVT_DVz0_max",
+                                                     "EVT_DVz0_ave",            "EVT_PVmass",            "EVT_Nominal_B_E",
+                                                     "EVT_DVmass_Dmeson_Emin",  "EVT_d2PVz_Dmeson_Emin", "EVT_d2PVd0_Dmeson_Emin"))
 
 
                .Define("EVT_MVA2_bkg", "MVAVec.at(0)")

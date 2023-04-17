@@ -50,7 +50,36 @@ processList_analysis = {
     'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{'chunks':50},
     'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{'chunks':50},
     'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50}
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50},
+
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0ENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0MuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0ENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0MuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcMuNu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstENu':{'chunks':50},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstMuNu':{'chunks':50},
+
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2K3Pi':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2TauNu':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Dd2TauNuTAUHADNU':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2EtapRho':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNu':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Ds2TauNuTAUHADNU':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LENu':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LMuNu':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2LRhoPi':{'chunks':50},
+    'p8_ee_Zcc_ecm91_EvtGen_Lc2Sigma2Pi':{'chunks':50}
+
     }
 prodTag_analysis     = "FCCee/spring2021/IDEA/"
 outputDirEos_analysis   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_stage1/"
@@ -210,7 +239,7 @@ class RDFanalysis():
 
                .Define("EVT_thrustNP",      'Algorithms::minimize_thrust("Minuit2","Migrad")(RP_px, RP_py, RP_pz)')
                .Define("RP_thrustangleNP",  'Algorithms::getAxisCosTheta(EVT_thrustNP, RP_px, RP_py, RP_pz)')
-               .Define("EVT_thrust",        'Algorithms::getThrustPointing(RP_thrustangleNP, RP_e, EVT_thrustNP, 1.)')
+               .Define("EVT_thrust",        'Algorithms::getThrustPointing(1.)(RP_thrustangleNP, RP_e, EVT_thrustNP)')
                .Define("RP_thrustangle",    'Algorithms::getAxisCosTheta(EVT_thrust, RP_px, RP_py, RP_pz)')
 
 
