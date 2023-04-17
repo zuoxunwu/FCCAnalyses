@@ -10,14 +10,7 @@ from array import array
 from config.common_defaults import deffccdicts
 import datetime
 
-print ("----> Load cxx analyzers from libFCCAnalyses... ",)
-ROOT.gSystem.Load("libFCCAnalyses")
-ROOT.gErrorIgnoreLevel = ROOT.kFatal
-#Is this still needed?? 01/04/2022 still to be the case
-_fcc  = ROOT.dummyLoader
-
-
-date=datetime.datetime.fromtimestamp(datetime.datetime.now().timestamp()).strftime('%Y-%m-%d_%H-%M-%S')
+DATE = datetime.datetime.fromtimestamp(datetime.datetime.now().timestamp()).strftime('%Y-%m-%d_%H-%M-%S')
 
 #__________________________________________________________
 def getElement(rdfModule, element, isFinal=False):
@@ -58,12 +51,12 @@ def getElement(rdfModule, element, isFinal=False):
             return ""
 
         elif element=='batchQueue':
-            print('The variable <{}> is optional in your analysys.py file, return default value workday'.format(element))
+            print('The variable <{}> is optional in your analysis.py file, return default value workday'.format(element))
             if isFinal: print('The option <{}> is not available in final analysis'.format(element))
             return "workday"
 
         elif element=='compGroup':
-             print('The variable <{}> is optional in your analysys.py file, return default value group_u_FCC.local_gen'.format(element))
+             print('The variable <{}> is optional in your analysis.py file, return default value group_u_FCC.local_gen'.format(element))
              if isFinal: print('The option <{}> is not available in final analysis'.format(element))
              return "group_u_FCC.local_gen"
 
@@ -83,7 +76,7 @@ def getElement(rdfModule, element, isFinal=False):
             return ""
 
         elif element=='testFile':
-            print('The variable <{}> is optional in your analysys.py file, return default file'.format(element))
+            print('The variable <{}> is optional in your analysis.py file, return default file'.format(element))
             if isFinal: print('The option <{}> is not available in final analysis'.format(element))
             return "root://eospublic.cern.ch//eos/experiment/fcc/ee/generation/DelphesEvents/spring2021/IDEA/p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU/events_131527278.root"
 
@@ -122,6 +115,40 @@ def getElement(rdfModule, element, isFinal=False):
                 print('The variable <{}> is optional in your analysis_final.py file return empty dictionary'.format(element))
                 return {}
             else: print('The option <{}> is not available in presel analysis'.format(element))
+
+        elif element=='doScale':
+            if isFinal:
+                print('The variable <{}> is optional in your analysis_final.py file return empty dictionary'.format(element))
+                return {}
+            else: print('The option <{}> is not available in presel analysis'.format(element))
+
+        elif element=='intLumi':
+            if isFinal:
+                print('The variable <{}> is optional in your analysis_final.py file, return empty dictionary. However, if you set doScale, then it is mandatory!'.format(element))
+                return {}
+            else: print('The option <{}> is not available in presel analysis'.format(element))
+
+        elif element=='saveTabular':
+            if isFinal:
+                print('The variable <{}> is optional in your analysis_final.py file return empty dictionary'.format(element))
+                return {}
+            else: print('The option <{}> is not available in presel analysis'.format(element))
+
+        elif element=='cutLabels':
+            if isFinal:
+                print('The variable <{}> is optional in your analysis_final.py file return empty dictionary'.format(element))
+                return {}
+            else: print('The option <{}> is not available in presel analysis'.format(element))
+
+        elif element=='geometryFile':
+            print('The variable <{}> is optional in your analysis.py file, return default value empty string'.format(element))
+            if isFinal: print('The option <{}> is not available in final analysis'.format(element))
+            return ""
+
+        elif element=='readoutName':
+            print('The variable <{}> is optional in your analysis.py file, return default value empty string'.format(element))
+            if isFinal: print('The option <{}> is not available in final analysis'.format(element))
+            return ""
 
         return None
 
@@ -310,11 +337,15 @@ def runPreprocess(df):
     d1.Print()
     sys.exit(3)
     return df
+
 #__________________________________________________________
 def runRDF(rdfModule, inputlist, outFile, nevt, args):
     # for convenience and compatibility with user code
     ROOT.gInterpreter.Declare("using namespace FCCAnalyses;")
-
+    geometryFile = getElement(rdfModule, "geometryFile")
+    readoutName  = getElement(rdfModule, "readoutName")
+    if geometryFile!="" and readoutName!="":
+        ROOT.CaloNtupleizer.loadGeometry(geometryFile, readoutName)
     ncpus = 1
     # cannot use MT with Range()
     if args.nevents < 0:
@@ -351,9 +382,20 @@ def runRDF(rdfModule, inputlist, outFile, nevt, args):
 #__________________________________________________________
 def sendToBatch(rdfModule, chunkList, process, analysisFile):
     localDir = os.environ["LOCAL_DIR"]
-    logDir   = localDir+"/BatchOutputs/{}/{}".format(date,process)
+    logDir   = localDir+"/BatchOutputs/{}/{}".format(DATE, process)
     if not os.path.exists(logDir):
         os.system("mkdir -p {}".format(logDir))
+
+    # Making sure the FCCAnalyses libraries are compiled and installed
+    try:
+        subprocess.check_output(['make', 'install'],
+                                cwd=localDir+'/build',
+                                stderr=subprocess.DEVNULL
+        )
+    except subprocess.CalledProcessError as e:
+        print("----> The FCCanalyses libraries are not properly build and installed!")
+        print('----> Aborting job submission...')
+        sys.exit(3)
 
     outputDir       = getElement(rdfModule, "outputDir")
     outputDirEos    = getElement(rdfModule, "outputDirEos")
@@ -378,10 +420,7 @@ def sendToBatch(rdfModule, chunkList, process, analysisFile):
 
         subprocess.getstatusoutput('chmod 777 %s'%(frunname))
         frun.write('#!/bin/bash\n')
-        frun.write('source /cvmfs/sw.hsf.org/key4hep/setup.sh\n')
-        frun.write('export PYTHONPATH=$LOCAL_DIR:$PYTHONPATH\n')
-        frun.write('export LD_LIBRARY_PATH=$LOCAL_DIR/install/lib:$LD_LIBRARY_PATH\n')
-        frun.write('export ROOT_INCLUDE_PATH=$LOCAL_DIR/install/include/FCCAnalyses:$ROOT_INCLUDE_PATH\n')
+        frun.write('source ' + localDir + '/setup.sh\n')
 
         #add userBatchConfig if any
         if userBatchConfig!="":
@@ -396,9 +435,9 @@ def sendToBatch(rdfModule, chunkList, process, analysisFile):
         frun.write('cd job{}_chunk{}\n'.format(process,ch))
 
         if not os.path.isabs(outputDir):
-            frun.write('$LOCAL_DIR/bin/fccanalysis run {} --batch --output {}chunk{}.root --files-list '.format(analysisFile, outputDir, ch))
+            frun.write(localDir + '/bin/fccanalysis run {} --batch --output {}chunk{}.root --files-list '.format(analysisFile, outputDir, ch))
         else:
-            frun.write('$LOCAL_DIR/bin/fccanalysis run {} --batch --output {}{}/chunk{}.root --files-list '.format(analysisFile, outputDir, process,ch))
+            frun.write(localDir + '/bin/fccanalysis run {} --batch --output {}{}/chunk{}.root --files-list '.format(analysisFile, outputDir, process,ch))
 
         for ff in range(len(chunkList[ch])):
             frun.write(' %s'%(chunkList[ch][ff]))
@@ -430,7 +469,7 @@ def sendToBatch(rdfModule, chunkList, process, analysisFile):
     frun_condor.write('Log              = {}/condor_job.{}.$(ClusterId).$(ProcId).log\n'.format(logDir,process))
     frun_condor.write('Output           = {}/condor_job.{}.$(ClusterId).$(ProcId).out\n'.format(logDir,process))
     frun_condor.write('Error            = {}/condor_job.{}.$(ClusterId).$(ProcId).error\n'.format(logDir,process))
-    frun_condor.write('getenv           = True\n')
+    frun_condor.write('getenv           = False\n')
     frun_condor.write('environment      = "LS_SUBCWD={}"\n'.format(logDir)) # not sure
     frun_condor.write('requirements     = ( (OpSysAndVer =?= "CentOS7") && (Machine =!= LastRemoteHost) && (TARGET.has_avx2 =?= True) )\n')
     frun_condor.write('on_exit_remove   = (ExitBySignal == False) && (ExitCode == 0)\n')
@@ -448,14 +487,14 @@ def sendToBatch(rdfModule, chunkList, process, analysisFile):
 #__________________________________________________________
 def addeosType(fileName):
     sfileName=fileName.split('/')
-    if sfileName[1]=='experiment':
+    if sfileName[2]=='experiment':
         fileName='root://eospublic.cern.ch/'+fileName
-    elif sfileName[1]=='user' or sfileName[1].contains('home-'):
+    elif sfileName[2]=='user' or sfileName[2].contains('home-'):
         fileName='root://eosuser.cern.ch/'+fileName
     else:
         print('unknown eos type, please check with developers as it might not run with best performances')
     return fileName
-    
+
 #__________________________________________________________
 def runLocal(rdfModule, fileList, args):
     #Create list of files to be Processed
@@ -465,7 +504,7 @@ def runLocal(rdfModule, fileList, args):
     nevents_local = 0
     for fileName in fileList:
 
-        if fileName.split('/')[0]=='eos':
+        if fileName.split('/')[1]=='eos':
             fileName=addeosType(fileName)
 
         fileListRoot.push_back(fileName)
@@ -502,6 +541,19 @@ def runLocal(rdfModule, fileList, args):
     if nevents_meta>nevents_local:n[0]=nevents_meta
     p = ROOT.TParameter(int)( "eventsProcessed", n[0])
     p.Write()
+
+#    if args.test:
+#        outf2 = ROOT.TFile(fileListRoot[0])
+#        outt2_1 = outf2.Get("metadata")
+#        outt2_2 = outf2.Get("run_metadata")
+#        outt2_3 = outf2.Get("evt_metadata")
+#        outt2_4 = outf2.Get("col_metadata")
+#        outf.cd()
+#        outt2_1.Write()
+#        outt2_2.Write()
+#        outt2_3.Write()
+#        outt2_4.Write()
+
     outf.Write()
     outf.Close()
 
@@ -519,10 +571,9 @@ def runLocal(rdfModule, fileList, args):
     if args.bench:
         import json
 
-        analysis_path = args.pathToAnalysisScript.rsplit('/', 1)[0]
         analysis_name = getElement(rdfModule, 'analysisName')
         if not analysis_name:
-            analysis_name = analysis_path
+            analysis_name = args.pathToAnalysisScript
 
         bench_time = {}
         bench_time['name'] = 'Time spent running the analysis: '
@@ -530,7 +581,7 @@ def runLocal(rdfModule, fileList, args):
         bench_time['unit'] = 'Seconds'
         bench_time['value'] = elapsed_time
         bench_time['range'] = 10
-        bench_time['extra'] = 'Analysis path: ' + analysis_path
+        bench_time['extra'] = 'Analysis path: ' + args.pathToAnalysisScript
         saveBenchmark('benchmarks_smaller_better.json', bench_time)
 
         bench_evt_per_sec = {}
@@ -539,12 +590,27 @@ def runLocal(rdfModule, fileList, args):
         bench_evt_per_sec['unit'] = 'Evt/s'
         bench_evt_per_sec['value'] = nevents_local / elapsed_time
         bench_time['range'] = 1000
-        bench_time['extra'] = 'Analysis path: ' + analysis_path
+        bench_time['extra'] = 'Analysis path: ' + args.pathToAnalysisScript
         saveBenchmark('benchmarks_bigger_better.json', bench_evt_per_sec)
 
 
 #__________________________________________________________
 def runStages(args, rdfModule, preprocess, analysisFile):
+    # check if analyses plugins need to be loaded before anything
+    analysesList = getElement(rdfModule, "analysesList")
+    if analysesList and len(analysesList) > 0:
+        _ana = []
+        for analysis in analysesList:
+            print(f'----> Load cxx analyzers from {analysis}...')
+            if analysis.startswith('libFCCAnalysis_'):
+                ROOT.gSystem.Load(analysis)
+            else:
+                ROOT.gSystem.Load(f'libFCCAnalysis_{analysis}')
+            if not hasattr(ROOT, analysis):
+                print(f'----> ERROR: analysis "{analysis}" not properly loaded. Exit')
+                sys.exit(4)
+            _ana.append(getattr(ROOT, analysis).dictionary)
+
     #check if outputDir exist and if not create it
     outputDir = getElement(rdfModule,"outputDir")
     if not os.path.exists(outputDir) and outputDir!='':
@@ -682,6 +748,8 @@ def runFinal(rdfModule):
     processEvents={}
     eventsTTree={}
     processList={}
+    saveTab=[]
+    efficiencyList=[]
 
     inputDir = getElement(rdfModule,"inputDir", True)
     if inputDir!="":
@@ -693,6 +761,23 @@ def runFinal(rdfModule):
 
     if not os.path.exists(outputDir) and outputDir!='':
         os.system("mkdir -p {}".format(outputDir))
+
+    cutList = getElement(rdfModule,"cutList", True)
+    length_cuts_names = max([len(cut) for cut in cutList])
+    cutLabels = getElement(rdfModule,"cutLabels", True)
+
+    # save a table in a separate tex file
+    saveTabular = getElement(rdfModule,"saveTabular", True)
+    if saveTabular:
+        # option to rewrite the cuts in a better way for the table. otherwise, take them from the cutList
+        if cutLabels:
+            cutNames = list(cutLabels.values())
+        else:
+            cutNames = [cut for cut in cutList]
+
+        cutNames.insert(0,' ')
+        saveTab.append(cutNames)
+        efficiencyList.append(cutNames)
 
     for pr in getElement(rdfModule,"processList", True):
         processEvents[pr]=0
@@ -745,10 +830,9 @@ def runFinal(rdfModule):
     print('processed events ',processEvents)
     print('events in ttree  ',eventsTTree)
 
-    cutList = getElement(rdfModule,"cutList", True)
-    length_cuts_names = max([len(cut) for cut in cutList])
-
     histoList = getElement(rdfModule,"histoList", True)
+    doScale = getElement(rdfModule,"doScale", True)
+    intLumi = getElement(rdfModule,"intLumi", True)
 
     doTree = getElement(rdfModule,"doTree", True)
     for pr in getElement(rdfModule,"processList", True):
@@ -766,6 +850,10 @@ def runFinal(rdfModule):
         histos_list = []
         tdf_list = []
         count_list = []
+        cuts_list = []
+        cuts_list.append(pr)
+        eff_list=[]
+        eff_list.append(pr)
 
         # Define all histos, snapshots, etc...
         print ('----> Defining snapshots and histograms')
@@ -779,8 +867,28 @@ def runFinal(rdfModule):
             histos = []
 
             for v in histoList:
-                model = ROOT.RDF.TH1DModel(v, ";{};".format(histoList[v]["title"]), histoList[v]["bin"], histoList[v]["xmin"], histoList[v]["xmax"])
-                histos.append(df_cut.Histo1D(model,histoList[v]["name"]))
+                if "name" in histoList[v]: # default 1D histogram
+                    model = ROOT.RDF.TH1DModel(v, ";{};".format(histoList[v]["title"]), histoList[v]["bin"], histoList[v]["xmin"], histoList[v]["xmax"])
+                    histos.append(df_cut.Histo1D(model,histoList[v]["name"]))
+                elif "cols" in histoList[v]: # multi dim histogram (1, 2 or 3D)
+                    cols = histoList[v]['cols']
+                    bins = histoList[v]['bins']
+                    bins_unpacked = tuple([i for sub in bins for i in sub])
+                    if len(bins) != len(cols):
+                        print ('----> Amount of columns should be equal to the amount of bin configs.')
+                        sys.exit(3)
+                    if len(cols) == 1:
+                        histos.append(df_cut.Histo1D((v, "", *bins_unpacked), cols[0]))
+                    elif len(cols) == 2:
+                        histos.append(df_cut.Histo2D((v, "", *bins_unpacked), cols[0], cols[1]))
+                    elif len(cols) == 3:
+                        histos.append(df_cut.Histo3D((v, "", *bins_unpacked), cols[0], cols[1], cols[2]))
+                    else:
+                        print ('----> Only 1, 2 or 3D histograms supported.')
+                        sys.exit(3)
+                else:
+                    print ('----> Error parsing the histogram config. Provide either name or cols.')
+                    sys.exit(3)
             histos_list.append(histos)
 
             if doTree:
@@ -796,11 +904,45 @@ def runFinal(rdfModule):
         print ('----> Done')
 
         nevents_real += all_events
+        uncertainty = ROOT.Math.sqrt(all_events)
+
+        if doScale:
+            all_events = all_events*1.*procDict[pr]["crossSection"]*procDict[pr]["kfactor"]*procDict[pr]["matchingEfficiency"]*intLumi/processEvents[pr]
+            uncertainty = ROOT.Math.sqrt(all_events)*procDict[pr]["crossSection"]*procDict[pr]["kfactor"]*procDict[pr]["matchingEfficiency"]*intLumi/processEvents[pr]
+            print('  Printing scaled number of events!!! ')
 
         print ('----> Cutflow')
         print ('       {cutname:{width}} : {nevents}'.format(cutname='All events', width=16+length_cuts_names, nevents=all_events))
+
+        if saveTabular:
+            cuts_list.append('{nevents:.2e} $\\pm$ {uncertainty:.2e}'.format(nevents=all_events,uncertainty=uncertainty)) # scientific notation - recomended for backgrounds
+            # cuts_list.append('{nevents:.3f} $\\pm$ {uncertainty:.3f}'.format(nevents=all_events,uncertainty=uncertainty)) # float notation - recomended for signals with few events
+            eff_list.append(1.) #start with 100% efficiency
+
         for i, cut in enumerate(cutList):
-            print ('       After selection {cutname:{width}} : {nevents}'.format(cutname=cut, width=length_cuts_names, nevents=count_list[i].GetValue()))
+            neventsThisCut = count_list[i].GetValue()
+            neventsThisCut_raw = neventsThisCut
+            uncertainty = ROOT.Math.sqrt(neventsThisCut_raw)
+            if doScale:
+                neventsThisCut = neventsThisCut*1.*procDict[pr]["crossSection"]*procDict[pr]["kfactor"]*procDict[pr]["matchingEfficiency"]*intLumi/processEvents[pr]
+                uncertainty = ROOT.Math.sqrt(neventsThisCut_raw)*procDict[pr]["crossSection"]*procDict[pr]["kfactor"]*procDict[pr]["matchingEfficiency"]*intLumi/processEvents[pr]
+            print ('       After selection {cutname:{width}} : {nevents}'.format(cutname=cut, width=length_cuts_names, nevents=neventsThisCut))
+
+            # Saving the number of events, uncertainty and efficiency for the output-file
+            if saveTabular and cut != 'selNone':
+                if neventsThisCut != 0:
+                    cuts_list.append('{nevents:.2e} $\\pm$ {uncertainty:.2e}'.format(nevents=neventsThisCut,uncertainty=uncertainty)) # scientific notation - recomended for backgrounds
+                    # cuts_list.append('{nevents:.3f} $\\pm$ {uncertainty:.3f}'.format(nevents=neventsThisCut,uncertainty=uncertainty)) # # float notation - recomended for signals with few events
+                    prevNevents = cuts_list[-2].split()
+                    eff_list.append('{eff:.3f}'.format(eff=1.*neventsThisCut/all_events))
+                # if number of events is zero, the previous uncertainty is saved instead:
+                elif '$\\pm$' in cuts_list[-1]:
+                    cut = (cuts_list[-1]).split()
+                    cuts_list.append('$\\leq$ {uncertainty}'.format(uncertainty=cut[2]))
+                    eff_list.append('0.')
+                else:
+                    cuts_list.append(cuts_list[-1])
+                    eff_list.append('0.')
 
         # And save everything
         print ('----> Saving outputs')
@@ -821,6 +963,38 @@ def runFinal(rdfModule):
                 validfile = testfile(fout_list[i])
                 if not validfile: continue
 
+        if saveTabular and cut != 'selNone':
+            saveTab.append(cuts_list)
+            efficiencyList.append(eff_list)
+
+    if saveTabular:
+        f = open(outputDir+"outputTabular.txt","w")
+        # Printing the number of events in format of a LaTeX table
+        print('\\begin{table}[H] \n    \\centering \n    \\resizebox{\\textwidth}{!}{ \n    \\begin{tabular}{|l||',end='',file=f)
+        print('c|' * (len(cuts_list)-1),end='',file=f)
+        print('} \hline',file=f)
+        for i, row in enumerate(saveTab):
+            print('        ', end='', file=f)
+            print(*row, sep = ' & ', end='', file=f)
+            print(' \\\\ ', file=f)
+            if (i == 0):
+                print('        \\hline',file=f)
+        print('        \\hline \n    \\end{tabular}} \n    \\caption{Caption} \n    \\label{tab:my_label} \n\\end{table}', file=f)
+
+        # Efficiency:
+        print('\n\nEfficiency: ', file=f)
+        print('\\begin{table}[H] \n    \\centering \n    \\resizebox{\\textwidth}{!}{ \n    \\begin{tabular}{|l||',end='',file=f)
+        print('c|' * (len(cuts_list)-1),end='',file=f)
+        print('} \hline',file=f)
+        for i in range(len(eff_list)):
+            print('        ', end='', file=f)
+            v = [row[i] for row in efficiencyList]
+            print(*v, sep = ' & ', end='', file=f)
+            print(' \\\\ ', file=f)
+            if (i == 0):
+                print('        \\hline',file=f)
+        print('        \\hline \n    \\end{tabular}} \n    \\caption{Caption} \n    \\label{tab:my_label} \n\\end{table}', file=f)
+        f.close()
 
     elapsed_time = time.time() - start_time
     print  ('==============================SUMMARY==============================')
@@ -832,7 +1006,6 @@ def runFinal(rdfModule):
 
 #__________________________________________________________
 def runPlots(analysisFile):
-
     import config.doPlots as dp
     dp.run(analysisFile)
 
@@ -868,7 +1041,7 @@ def setup_run_parser(parser):
     publicOptions.add_argument("--rerunfailed", action='store_true', help="Rerun failed jobs", default=False)
     publicOptions.add_argument("--jobdir", help="Specify the batch job directory", type=str, default="output.root")
     publicOptions.add_argument("--eloglevel", help="Specify the RDataFrame ELogLevel", type=str, default="kUnset", choices = ['kUnset','kFatal','kError','kWarning','kInfo','kDebug'])
-
+    
     internalOptions = parser.add_argument_group('\033[4m\033[1m\033[91m Internal options, NOT FOR USERS\033[0m')
     internalOptions.add_argument("--batch", action='store_true', help="Submit on batch", default=False)
 
@@ -883,10 +1056,8 @@ def run(mainparser, subparser=None):
     """
 
     if subparser:
-        print("===================setup subparser")
         setup_run_parser(subparser)
     args, _ = mainparser.parse_known_args()
-    print("args in mains code==============================",args)
     #check that the analysis file exists
     analysisFile = args.pathToAnalysisScript
     if not os.path.isfile(analysisFile):
@@ -894,45 +1065,74 @@ def run(mainparser, subparser=None):
         print("specify a valid analysis script in the command line arguments")
         sys.exit(3)
 
+    print ("----> Info: Loading analyzers from libFCCAnalyses... ",)
+    ROOT.gSystem.Load("libFCCAnalyses")
+    ROOT.gErrorIgnoreLevel = ROOT.kFatal
+    #Is this still needed?? 01/04/2022 still to be the case
+    _fcc = ROOT.dummyLoader
+
     #set the RDF ELogLevel
     try:
         verbosity = ROOT.Experimental.RLogScopedVerbosity(ROOT.Detail.RDF.RDFLogChannel(), getattr(ROOT.Experimental.ELogLevel,args.eloglevel))
     except AttributeError:
         pass
     #load the analysis
-    analysisFile=os.path.abspath(analysisFile)
-    print ("--------------loading analysis file  ",analysisFile)
+    analysisFile = os.path.abspath(analysisFile)
+    print('----> Info: Loading analysis file:')
+    print('      ' + analysisFile)
     rdfSpec   = importlib.util.spec_from_file_location("rdfanalysis", analysisFile)
     rdfModule = importlib.util.module_from_spec(rdfSpec)
     rdfSpec.loader.exec_module(rdfModule)
 
-    try:
-        args.command
-        if args.command == "run":      runStages(args, rdfModule, args.preprocess, analysisFile)
-        elif args.command == "final":  runFinal(rdfModule)
-        elif args.command == "plots":  runPlots(analysisFile)
+    if hasattr(args, 'command'):
+        if args.command == "run":
+            try:
+                runStages(args, rdfModule, args.preprocess, analysisFile)
+            except Exception as excp:
+                print('----> Error: During the execution of the stage file:')
+                print('      ' + analysisFile)
+                print('      exception occurred:')
+                print(excp)
+        elif args.command == "final":
+            try:
+                runFinal(rdfModule)
+            except Exception as excp:
+                print('----> Error: During the execution of the final stage file:')
+                print('      ' + analysisFile)
+                print('      exception occurred:')
+                print(excp)
+        elif args.command == "plots":
+            try:
+                runPlots(analysisFile)
+            except Exception as excp:
+                print('----> Error: During the execution of the plots file:')
+                print('      ' + analysisFile)
+                print('      exception occurred:')
+                print(excp)
         return
-    except AttributeError:
-        print("============running the old way")
 
+    print('----> Info: Running the old way...')
+    print('      This way of running the analysis is deprecated and will')
+    print('      be removed in the next release!')
 
-    #below is legacy using the old way of runnig with options in "python config/FCCAnalysisRun.py analysis.py --options
-    #check if this is final analysis
+    # below is legacy using the old way of runnig with options in
+    # "python config/FCCAnalysisRun.py analysis.py --options check if this is
+    # final analysis
     if args.final:
         if args.plots:
-            print ('----> Can not have --plots with --final, exit')
+            print('----> Can not have --plots with --final, exit')
             sys.exit(3)
         if args.preprocess:
-            print ('----> Can not have --preprocess with --final, exit')
+            print('----> Can not have --preprocess with --final, exit')
             sys.exit(3)
         runFinal(rdfModule)
 
     elif args.plots:
         if args.final:
-            print ('----> Can not have --final with --plots, exit')
+            print('----> Can not have --final with --plots, exit')
             sys.exit(3)
         if args.preprocess:
-            print ('----> Can not have --preprocess with --plots, exit')
+            print('----> Can not have --preprocess with --plots, exit')
             sys.exit(3)
         runPlots(analysisFile)
 
@@ -942,10 +1142,10 @@ def run(mainparser, subparser=None):
     else:
         if args.preprocess:
             if args.plots:
-                print ('----> Can not have --plots with --preprocess, exit')
+                print('----> Can not have --plots with --preprocess, exit')
                 sys.exit(3)
             if args.final:
-                print ('----> Can not have --final with --preprocess, exit')
+                print('----> Can not have --final with --preprocess, exit')
                 sys.exit(3)
         runStages(args, rdfModule, args.preprocess, analysisFile)
 
