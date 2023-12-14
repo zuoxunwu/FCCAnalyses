@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1702574239316,
+  "lastUpdate": 1702574240712,
   "repoUrl": "https://github.com/zuoxunwu/FCCAnalyses",
   "entries": {
     "Benchmark": [
@@ -4290,6 +4290,60 @@ window.BENCHMARK_DATA = {
             "unit": "Seconds",
             "range": 10,
             "extra": "Analysis path: examples/FCCee/vertex_lcfiplus/analysis_V0.py"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zuoxunwu@gmail.com",
+            "name": "Xunwu Zuo",
+            "username": "zuoxunwu"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "716d6378e7d3b8f1f52af0af6c566a6907adc994",
+          "message": "Merge pull request #3 from zuoxunwu/xunwu_topEWK\n\nAdd first script for top EWK analysis",
+          "timestamp": "2023-12-14T18:07:27+01:00",
+          "tree_id": "d780aa9405c3600ee381b666b2912686c5ed32c1",
+          "url": "https://github.com/zuoxunwu/FCCAnalyses/commit/716d6378e7d3b8f1f52af0af6c566a6907adc994"
+        },
+        "date": 1702574240281,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "prod | Events processed per second: examples/FCCee/weaver/analysis_inference.py",
+            "value": 3.062640932699196,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "prod | Events processed per second: case-studies/analysis_example/scripts/analysis_example.py",
+            "value": 9.759793611847353,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "prod | Events processed per second: examples/FCCee/higgs/mH-recoil/mumu/analysis_stage1.py",
+            "value": 9.112703611200025,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "prod | Events processed per second: examples/FCCee/flavour/Bc2TauNu/analysis_B2TauNu_truth.py",
+            "value": 6.714847407907756,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "prod | Events processed per second: examples/FCCee/test/jet_constituents.py",
+            "value": 9.11588001824174,
+            "unit": "Evt/s"
+          },
+          {
+            "name": "prod | Events processed per second: examples/FCCee/vertex_lcfiplus/analysis_V0.py",
+            "value": 3.207758805768665,
+            "unit": "Evt/s"
           }
         ]
       }
