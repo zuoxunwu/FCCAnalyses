@@ -23,7 +23,9 @@ prodTag     = "FCCee/winter2023/IDEA/"
 outputDir   = "outputs/FCCee/top/hadronic/analysis_stage1/"
 
 #EOS output directory for batch jobs
+outputDirEos = "/eos/experiment/fcc/ee/analyses/case-studies/top/topEWK/flatNtuples/winter2023"
 outputDirEos = "/eos/experiment/fcc/ee/analyses/case-studies/top/topEWK/flatNtuples_20240108/winter2023"
+
 
 
 #Optional
@@ -152,14 +154,11 @@ class RDFanalysis():
                .Alias("Jet3","Jet#3.index")
                .Define("jet_btag", "ReconstructedParticle::getJet_btag(Jet3, ParticleIDs, ParticleIDs_0)")
 
-
                .Define("Emiss_energy",  "ReconstructedParticle::get_e(MissingET)")
                .Define("Emiss_p",       "ReconstructedParticle::get_p(MissingET)")
                .Define("Emiss_px",      "ReconstructedParticle::get_px(MissingET)") #x-component of RecoMissingEnergy
                .Define("Emiss_py",      "ReconstructedParticle::get_py(MissingET)") #y-component of RecoMissingEnergy
                .Define("Emiss_pz",      "ReconstructedParticle::get_pz(MissingET)") #z-component of RecoMissingEnergy
-
-
         )
         return df2
 

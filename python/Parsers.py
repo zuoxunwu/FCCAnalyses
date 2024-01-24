@@ -39,6 +39,12 @@ def setup_test_parser(parser):
         type=str,
         help='Exclude tests matching regular expression'
     )
+    test_args.add_argument(
+        '-j', '--parallel',
+        type=int,
+        default=-1,
+        help='number of tests running in parallel (equivalent to `ctest -j`)'
+    )
 
 
 def setup_pin_parser(parser):
@@ -87,9 +93,6 @@ def setup_run_parser(parser):
                         help='rerun failed jobs')
     parser.add_argument('--jobdir', type=str, default='output.root',
                         help='specify the batch job directory')
-    parser.add_argument('--eloglevel', type=str, default='kUnset',
-                        choices=['kUnset', 'kFatal', 'kError', 'kWarning', 'kInfo', 'kDebug'],
-                        help='specify the RDataFrame ELogLevel')
 
     # Internal argument, not to be used by the users
     parser.add_argument('--batch', action='store_true', default=False,
@@ -102,9 +105,6 @@ def setup_run_parser_final(parser):
     '''
     parser.add_argument('anafile_path',
                         help='path to analysis_final script')
-    parser.add_argument('--eloglevel', type=str, default='kUnset',
-                        choices=['kUnset', 'kFatal', 'kError', 'kWarning', 'kInfo', 'kDebug'],
-                        help='Specify the RDataFrame ELogLevel')
 
 
 def setup_run_parser_plots(parser):
