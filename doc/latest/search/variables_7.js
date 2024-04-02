@@ -1,7 +1,7 @@
 var searchData=
 [
   ['index_0',['index',['../struct_f_c_c_analyses_1_1my_utils_1_1_f_c_c_analyses_composite.html#a456b23abb9e6a6233b5eb1da95ccaefb',1,'FCCAnalyses::myUtils::FCCAnalysesComposite']]],
-  ['input_5fcoll_1',['input_coll',['../classjet_clustering_helper_1_1_exclusive_jet_clustering_helper.html#aa3fd3a9a8125270bbdb1bbf093565aa3',1,'jetClusteringHelper::ExclusiveJetClusteringHelper']]],
+  ['input_5fcoll_1',['input_coll',['../classjet_clustering_helper_1_1_exclusive_jet_clustering_helper.html#aa3fd3a9a8125270bbdb1bbf093565aa3',1,'jetClusteringHelper.ExclusiveJetClusteringHelper.input_coll'],['../classjet_clustering_helper_1_1_inclusive_jet_clustering_helper.html#a411edb14f09dcf176a6584b5ca24aece',1,'jetClusteringHelper.InclusiveJetClusteringHelper.input_coll']]],
   ['input_5fnames_5f_2',['input_names_',['../class_o_n_n_x_runtime.html#a4a73a8a724bb65c98baef2e53cc05b1d',1,'ONNXRuntime']]],
   ['input_5fnode_5fdims_5f_3',['input_node_dims_',['../class_o_n_n_x_runtime.html#a78644c4bc27cf26833dd3026289fbd2c',1,'ONNXRuntime']]],
   ['input_5fnode_5fstrings_5f_4',['input_node_strings_',['../class_o_n_n_x_runtime.html#a9ea4568b9e064847a8ed4d4e5a8dafc7',1,'ONNXRuntime']]],

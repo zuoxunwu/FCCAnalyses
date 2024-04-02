@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['define_0',['define',['../classjet_clustering_helper_1_1_exclusive_jet_clustering_helper.html#ad6c66277a80008af24dff6953e7e5b1d',1,'jetClusteringHelper.ExclusiveJetClusteringHelper.define()'],['../classjet_flavour_helper_1_1_jet_flavour_helper.html#a0ab17bf37132b0f2e58aad770827f4ce',1,'jetFlavourHelper.JetFlavourHelper.define()']]],
+  ['define_0',['define',['../classjet_clustering_helper_1_1_exclusive_jet_clustering_helper.html#ad6c66277a80008af24dff6953e7e5b1d',1,'jetClusteringHelper.ExclusiveJetClusteringHelper.define()'],['../classjet_clustering_helper_1_1_inclusive_jet_clustering_helper.html#ae9411d67724d47b517f82303e1ee8a4b',1,'jetClusteringHelper.InclusiveJetClusteringHelper.define()'],['../classjet_flavour_helper_1_1_jet_flavour_helper.html#a0ab17bf37132b0f2e58aad770827f4ce',1,'jetFlavourHelper.JetFlavourHelper.define()']]],
   ['delphes2edm4hep_5ftrackcovmatrix_1',['Delphes2Edm4hep_TrackCovMatrix',['../namespace_f_c_c_analyses_1_1_vertexing_utils.html#a789423b2190f9ee2ccd0d35d249ee4e9',1,'FCCAnalyses::VertexingUtils']]],
   ['delphes2edm4hep_5ftrackparam_2',['Delphes2Edm4hep_TrackParam',['../namespace_f_c_c_analyses_1_1_vertexing_utils.html#ac8e66e7bc04f560ca1fa622d6844f93e',1,'FCCAnalyses::VertexingUtils']]],
   ['description_3',['description',['../class_external_recombiner.html#a5a7816ddeabf4cd63848fd5447fc269d',1,'ExternalRecombiner::description()'],['../classcontrib_1_1_valencia_plugin.html#ab75c117030f3a8b4f77ca4bb38ae87b8',1,'contrib::ValenciaPlugin::description()']]],
