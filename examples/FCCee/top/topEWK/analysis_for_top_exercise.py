@@ -3,38 +3,25 @@ import os, copy # tagging
 #Mandatory: List of processes
 processList = {
 
-              'wzp6_ee_SM_tt_tlepTlep_noCKMmix_keepPolInfo_ecm365': {'chunks':6},
-              'wzp6_ee_SM_tt_tlepThad_noCKMmix_keepPolInfo_ecm365': {'chunks':6},
-              'wzp6_ee_SM_tt_thadTlep_noCKMmix_keepPolInfo_ecm365': {'chunks':6},
-              'wzp6_ee_SM_tt_thadThad_noCKMmix_keepPolInfo_ecm365': {'chunks':6},
+#              'wzp6_ee_SM_tt_tlepTlep_noCKMmix_keepPolInfo_ecm365': {'chunks':6},
+#              'wzp6_ee_SM_tt_tlepThad_noCKMmix_keepPolInfo_ecm365': {'chunks':6},
+#              'wzp6_ee_SM_tt_thadTlep_noCKMmix_keepPolInfo_ecm365': {'chunks':6},
+#              'wzp6_ee_SM_tt_thadThad_noCKMmix_keepPolInfo_ecm365': {'chunks':6},
 
-#              "wzp6_ee_SM_tt_tlepTlep_noCKMmix_keepPolInfo_ta_ttAup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepTlep_noCKMmix_keepPolInfo_ta_ttAdown_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepTlep_noCKMmix_keepPolInfo_tv_ttAup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepTlep_noCKMmix_keepPolInfo_tv_ttAdown_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepTlep_noCKMmix_keepPolInfo_vr_ttZup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepTlep_noCKMmix_keepPolInfo_vr_ttZdown_ecm365": {'chunks':5},
-#          
-#              "wzp6_ee_SM_tt_tlepThad_noCKMmix_keepPolInfo_ta_ttAup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepThad_noCKMmix_keepPolInfo_ta_ttAdown_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepThad_noCKMmix_keepPolInfo_tv_ttAup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepThad_noCKMmix_keepPolInfo_tv_ttAdown_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepThad_noCKMmix_keepPolInfo_vr_ttZup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_tlepThad_noCKMmix_keepPolInfo_vr_ttZdown_ecm365": {'chunks':5},
-#          
-#              "wzp6_ee_SM_tt_thadTlep_noCKMmix_keepPolInfo_ta_ttAup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadTlep_noCKMmix_keepPolInfo_ta_ttAdown_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadTlep_noCKMmix_keepPolInfo_tv_ttAup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadTlep_noCKMmix_keepPolInfo_tv_ttAdown_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadTlep_noCKMmix_keepPolInfo_vr_ttZup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadTlep_noCKMmix_keepPolInfo_vr_ttZdown_ecm365": {'chunks':5},
-#          
-#              "wzp6_ee_SM_tt_thadThad_noCKMmix_keepPolInfo_ta_ttAup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadThad_noCKMmix_keepPolInfo_ta_ttAdown_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadThad_noCKMmix_keepPolInfo_tv_ttAup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadThad_noCKMmix_keepPolInfo_tv_ttAdown_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadThad_noCKMmix_keepPolInfo_vr_ttZup_ecm365": {'chunks':5},
-#              "wzp6_ee_SM_tt_thadThad_noCKMmix_keepPolInfo_vr_ttZdown_ecm365": {'chunks':5},
+              # inclusive samples in Pythia
+              'p8_ee_tt_ecm365': {'chunks':5},
+              'p8_ee_WW_ecm365': {'chunks':5},
+              'p8_ee_ZZ_ecm365': {'chunks':5},
+
+              # ZH samples, no inclusive ones
+              'wzp6_ee_bbH_ecm365': {'chunks':5},
+              'wzp6_ee_ccH_ecm365': {'chunks':5},
+              'wzp6_ee_ssH_ecm365': {'chunks':5},
+              'wzp6_ee_qqH_ecm365': {'chunks':5},
+              'wzp6_ee_tautauH_ecm365': {'chunks':5},
+              'wzp6_ee_mumuH_ecm365': {'chunks':5},
+              'wzp6_ee_eeH_ecm365': {'chunks':5},
+              'wzp6_ee_nunuH_ecm365': {'chunks':5}
 
             }
 
@@ -134,8 +121,8 @@ class RDFanalysis():
                .Define("n_genMuons",     "FCCAnalyses::MCParticle::get_n(genMuon)")
                .Define("n_genElectrons", "FCCAnalyses::MCParticle::get_n(genElectron)")
 
-               .Filter("n_genTops==2")
-               .Filter("n_genWs==2")
+               #.Filter("n_genTops==2")
+               #.Filter("n_genWs==2")
 
                .Define("Wp_elenu", "FCCAnalyses::MCParticle::get_decay( 24, 11, false)(Particle, Particle1)")
                .Define("Wp_munu",  "FCCAnalyses::MCParticle::get_decay( 24, 13, false)(Particle, Particle1)")
