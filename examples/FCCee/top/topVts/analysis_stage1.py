@@ -59,13 +59,13 @@ prodTag     = "FCCee/winter2023/IDEA/"
 outputDir   = "outputs/FCCee/top/topVts/analysis_stage1/"
 
 #EOS output directory for batch jobs
-outputDirEos = "/eos/experiment/fcc/ee/analyses/case-studies/top/topVts/flatNtuples_2024Feb/winter2023"
+outputDirEos = "/eos/experiment/fcc/ee/analyses/case-studies/top/topVts/flatNtuples_2024March/winter2023"
 
 
 #Optional
 nCPUS       = 8
 runBatch    = True
-batchQueue = "workday"
+batchQueue = "nextweek"
 compGroup = "group_u_FCC.local_gen"
 
 ## tagging -------------------------------
@@ -99,10 +99,25 @@ weaver_model = get_file_path(url_model, local_model)
 from addons.ONNXRuntime.jetFlavourHelper import JetFlavourHelper
 from addons.FastJet.jetClusteringHelper import (
     ExclusiveJetClusteringHelper,
+    InclusiveJetClusteringHelper,
 )
 
 jetFlavourHelper = None
 jetClusteringHelper = None
+
+jetClusteringHelper_kt2   = None
+jetClusteringHelper_kt4   = None
+jetClusteringHelper_kt6   = None
+jetClusteringHelper_R5   = None
+jetClusteringHelper_R10   = None
+jetClusteringHelper_R15   = None
+jetFlavourHelper_kt2   = None
+jetFlavourHelper_kt4   = None
+jetFlavourHelper_kt6   = None
+jetFlavourHelper_R5   = None
+jetFlavourHelper_R10   = None
+jetFlavourHelper_R15   = None
+
 ## tagging ------------------------------
 
 
@@ -286,45 +301,45 @@ class RDFanalysis():
 
                # exclusive kT, R = 0.4, exactly njets = 6, sort by E
                # clustering_kt(float arg_radius = 0.5, int arg_exclusive = 0, float arg_cut = 5, int arg_sorted = 0, int arg_recombination = 0);
-               .Define("FCCAnalysesJets_kt", "JetClustering::clustering_kt(0.4, 2, 6, 1, 10)(pseudo_jets)")
-               .Define("jet_kt_exactly6",           "JetClusteringUtils::get_pseudoJets(FCCAnalysesJets_kt)")
-               .Define("n_jets_kt_exactly6",        "return jet_kt_exactly6.size()")
-               .Define("jet_kt_exactly6_px",        "JetClusteringUtils::get_px(jet_kt_exactly6)")
-               .Define("jet_kt_exactly6_py",        "JetClusteringUtils::get_py(jet_kt_exactly6)")
-               .Define("jet_kt_exactly6_pz",        "JetClusteringUtils::get_pz(jet_kt_exactly6)")
-               .Define("jet_kt_exactly6_phi",       "JetClusteringUtils::get_phi(jet_kt_exactly6)")
-               .Define("jet_kt_exactly6_eta",       "JetClusteringUtils::get_eta(jet_kt_exactly6)")
-               .Define("jet_kt_exactly6_energy",    "JetClusteringUtils::get_e(jet_kt_exactly6)")
-               .Define("jet_kt_exactly6_mass",      "JetClusteringUtils::get_m(jet_kt_exactly6)")
-               .Define("jet_kt_exactly6_flavor",    "JetTaggingUtils::get_flavour(jet_kt_exactly6, Particle)")
+#               .Define("FCCAnalysesJets_kt", "JetClustering::clustering_kt(0.4, 2, 6, 1, 10)(pseudo_jets)")
+#               .Define("jet_kt_exactly6",           "JetClusteringUtils::get_pseudoJets(FCCAnalysesJets_kt)")
+#               .Define("n_jets_kt_exactly6",        "return jet_kt_exactly6.size()")
+#               .Define("jet_kt_exactly6_px",        "JetClusteringUtils::get_px(jet_kt_exactly6)")
+#               .Define("jet_kt_exactly6_py",        "JetClusteringUtils::get_py(jet_kt_exactly6)")
+#               .Define("jet_kt_exactly6_pz",        "JetClusteringUtils::get_pz(jet_kt_exactly6)")
+#               .Define("jet_kt_exactly6_phi",       "JetClusteringUtils::get_phi(jet_kt_exactly6)")
+#               .Define("jet_kt_exactly6_eta",       "JetClusteringUtils::get_eta(jet_kt_exactly6)")
+#               .Define("jet_kt_exactly6_energy",    "JetClusteringUtils::get_e(jet_kt_exactly6)")
+#               .Define("jet_kt_exactly6_mass",      "JetClusteringUtils::get_m(jet_kt_exactly6)")
+#               .Define("jet_kt_exactly6_flavor",    "JetTaggingUtils::get_flavour(jet_kt_exactly6, Particle)")
 
                # exclusive kT, R = 0.8, up to njets = 6, sort by E
                # clustering_kt(float arg_radius = 0.5, int arg_exclusive = 0, float arg_cut = 5, int arg_sorted = 0, int arg_recombination = 0);
-               .Define("FCCAnalysesJets_kt_upto", "JetClustering::clustering_kt(0.8, 3, 6, 1, 10)(pseudo_jets)")
-               .Define("jet_kt_upto6",           "JetClusteringUtils::get_pseudoJets(FCCAnalysesJets_kt_upto)")
-               .Define("n_jets_kt_upto6",        "return jet_kt_upto6.size()")
-               .Define("jet_kt_upto6_px",        "JetClusteringUtils::get_px(jet_kt_upto6)")
-               .Define("jet_kt_upto6_py",        "JetClusteringUtils::get_py(jet_kt_upto6)")
-               .Define("jet_kt_upto6_pz",        "JetClusteringUtils::get_pz(jet_kt_upto6)")
-               .Define("jet_kt_upto6_phi",       "JetClusteringUtils::get_phi(jet_kt_upto6)")
-               .Define("jet_kt_upto6_eta",       "JetClusteringUtils::get_eta(jet_kt_upto6)")
-               .Define("jet_kt_upto6_energy",    "JetClusteringUtils::get_e(jet_kt_upto6)")
-               .Define("jet_kt_upto6_mass",      "JetClusteringUtils::get_m(jet_kt_upto6)")
-               .Define("jet_kt_upto6_flavor",    "JetTaggingUtils::get_flavour(jet_kt_upto6, Particle)")
+#               .Define("FCCAnalysesJets_kt_upto", "JetClustering::clustering_kt(0.8, 3, 6, 1, 10)(pseudo_jets)")
+#               .Define("jet_kt_upto6",           "JetClusteringUtils::get_pseudoJets(FCCAnalysesJets_kt_upto)")
+#               .Define("n_jets_kt_upto6",        "return jet_kt_upto6.size()")
+#               .Define("jet_kt_upto6_px",        "JetClusteringUtils::get_px(jet_kt_upto6)")
+#               .Define("jet_kt_upto6_py",        "JetClusteringUtils::get_py(jet_kt_upto6)")
+#               .Define("jet_kt_upto6_pz",        "JetClusteringUtils::get_pz(jet_kt_upto6)")
+#               .Define("jet_kt_upto6_phi",       "JetClusteringUtils::get_phi(jet_kt_upto6)")
+#               .Define("jet_kt_upto6_eta",       "JetClusteringUtils::get_eta(jet_kt_upto6)")
+#               .Define("jet_kt_upto6_energy",    "JetClusteringUtils::get_e(jet_kt_upto6)")
+#               .Define("jet_kt_upto6_mass",      "JetClusteringUtils::get_m(jet_kt_upto6)")
+#               .Define("jet_kt_upto6_flavor",    "JetTaggingUtils::get_flavour(jet_kt_upto6, Particle)")
 
                # ee_genkt (anti-kT here) R= 0.4, inclusive, pt>1, sort by E
                # clustering_ee_genkt(float arg_radius = 0.5, int arg_exclusive = 0, float arg_cut = 5., int arg_sorted = 0, int arg_recombination = 0, float arg_exponent = 0.);
-               .Define("FCCAnalysesJets_ee_genkt",  "JetClustering::clustering_ee_genkt(0.4, 0, 1, 1, 0, -1)(pseudo_jets)")
-               .Define("jet_ee_genkt04",            "JetClusteringUtils::get_pseudoJets(FCCAnalysesJets_ee_genkt)")
-               .Define("n_jets_ee_genkt04",         "return jet_ee_genkt04.size()")
-               .Define("jet_ee_genkt04_px",         "JetClusteringUtils::get_px(jet_ee_genkt04)")
-               .Define("jet_ee_genkt04_py",         "JetClusteringUtils::get_py(jet_ee_genkt04)")
-               .Define("jet_ee_genkt04_pz",         "JetClusteringUtils::get_pz(jet_ee_genkt04)")
-               .Define("jet_ee_genkt04_phi",        "JetClusteringUtils::get_phi(jet_ee_genkt04)")
-               .Define("jet_ee_genkt04_eta",        "JetClusteringUtils::get_eta(jet_ee_genkt04)")
-               .Define("jet_ee_genkt04_energy",     "JetClusteringUtils::get_e(jet_ee_genkt04)")
-               .Define("jet_ee_genkt04_mass",       "JetClusteringUtils::get_m(jet_ee_genkt04)")
-               .Define("jet_ee_genkt04_flavor",     "JetTaggingUtils::get_flavour(jet_ee_genkt04, Particle)")
+#               .Define("FCCAnalysesJets_ee_genkt",  "JetClustering::clustering_ee_genkt(0.4, 0, 1, 1, 0, -1)(pseudo_jets)")
+#               .Define("jet_ee_genkt04",            "JetClusteringUtils::get_pseudoJets(FCCAnalysesJets_ee_genkt)")
+#               .Define("n_jets_ee_genkt04",         "return jet_ee_genkt04.size()")
+#               .Define("jet_ee_genkt04_px",         "JetClusteringUtils::get_px(jet_ee_genkt04)")
+#               .Define("jet_ee_genkt04_py",         "JetClusteringUtils::get_py(jet_ee_genkt04)")
+#               .Define("jet_ee_genkt04_pz",         "JetClusteringUtils::get_pz(jet_ee_genkt04)")
+#               .Define("jet_ee_genkt04_phi",        "JetClusteringUtils::get_phi(jet_ee_genkt04)")
+#               .Define("jet_ee_genkt04_eta",        "JetClusteringUtils::get_eta(jet_ee_genkt04)")
+#               .Define("jet_ee_genkt04_energy",     "JetClusteringUtils::get_e(jet_ee_genkt04)")
+#               .Define("jet_ee_genkt04_mass",       "JetClusteringUtils::get_m(jet_ee_genkt04)")
+#               .Define("jet_ee_genkt04_flavor",     "JetTaggingUtils::get_flavour(jet_ee_genkt04, Particle)")
 
                # valencia_algorithm, R=0.5, exclusive clustering with dcut = 6, sort by E, recombination E-scheme
                # clustering_valencia(float arg_radius = 0.5, int arg_exclusive = 0, float arg_cut = 5., int arg_sorted = 0, int arg_recombination = 0, float arg_beta = 1., float arg_gamma = 1.);
@@ -362,8 +377,18 @@ class RDFanalysis():
                .Define("ReconstructedParticlesNoMuons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles,muons_20)")
         )
 
-        global jetClusteringHelper
-        global jetFlavourHelper
+        global jetClusteringHelper_kt2
+        global jetClusteringHelper_kt4
+        global jetClusteringHelper_kt6
+        global jetClusteringHelper_R5
+        global jetClusteringHelper_R10
+        global jetClusteringHelper_R15
+        global jetFlavourHelper_kt2
+        global jetFlavourHelper_kt4
+        global jetFlavourHelper_kt6
+        global jetFlavourHelper_R5
+        global jetFlavourHelper_R10
+        global jetFlavourHelper_R15
         ## define jet and run clustering parameters
         ## name of collections in EDM root files
         collections = {
@@ -383,41 +408,159 @@ class RDFanalysis():
         collections_nomuons["PFParticles"] = "ReconstructedParticlesNoMuons"
 
         ## def __init__(self, coll, njets, tag="")
-        jetClusteringHelper = ExclusiveJetClusteringHelper(
-            collections_nomuons["PFParticles"], 6
+        jetClusteringHelper_kt2 = ExclusiveJetClusteringHelper(
+            collections_nomuons["PFParticles"], 2, "_kt2"
         )
-        df3 = jetClusteringHelper.define(df3)
+        jetClusteringHelper_kt4 = ExclusiveJetClusteringHelper(
+            collections_nomuons["PFParticles"], 4, "_kt4"
+        )
+        jetClusteringHelper_kt6 = ExclusiveJetClusteringHelper(
+            collections_nomuons["PFParticles"], 6, "_kt6"
+        )
+        jetClusteringHelper_R5  = InclusiveJetClusteringHelper(
+            collections_nomuons["PFParticles"], 0.5, 1, "_R5"
+        )
+        jetClusteringHelper_R10 = InclusiveJetClusteringHelper(
+            collections_nomuons["PFParticles"], 1.0, 1, "_R10"
+        )
+        jetClusteringHelper_R15 = InclusiveJetClusteringHelper(
+            collections_nomuons["PFParticles"], 1.5, 1, "_R15"
+        )
+        df3 = jetClusteringHelper_kt2.define(df3)
+        df3 = jetClusteringHelper_kt4.define(df3)
+        df3 = jetClusteringHelper_kt6.define(df3)
+        df3 = jetClusteringHelper_R5. define(df3)
+        df3 = jetClusteringHelper_R10.define(df3)
+        df3 = jetClusteringHelper_R15.define(df3)
 
         ## define jet flavour tagging parameters
 
-        jetFlavourHelper = JetFlavourHelper(
+        jetFlavourHelper_kt2 = JetFlavourHelper(
             collections_nomuons,
-            jetClusteringHelper.jets,
-            jetClusteringHelper.constituents,
+            jetClusteringHelper_kt2.jets,
+            jetClusteringHelper_kt2.constituents,
+            "_kt2",
+        )
+        jetFlavourHelper_kt4 = JetFlavourHelper(
+            collections_nomuons,
+            jetClusteringHelper_kt4.jets,
+            jetClusteringHelper_kt4.constituents,
+            "_kt4",
+        )
+        jetFlavourHelper_kt6 = JetFlavourHelper(
+            collections_nomuons,
+            jetClusteringHelper_kt6.jets,
+            jetClusteringHelper_kt6.constituents,
+            "_kt6",
+        )
+        jetFlavourHelper_R5 = JetFlavourHelper(
+            collections_nomuons,
+            jetClusteringHelper_R5.jets,
+            jetClusteringHelper_R5.constituents,
+            "_R5",
+        )
+        jetFlavourHelper_R10 = JetFlavourHelper(
+            collections_nomuons,
+            jetClusteringHelper_R10.jets,
+            jetClusteringHelper_R10.constituents,
+            "_R10",
+        )
+        jetFlavourHelper_R15 = JetFlavourHelper(
+            collections_nomuons,
+            jetClusteringHelper_R15.jets,
+            jetClusteringHelper_R15.constituents,
+            "_R15",
         )
 
         ## define observables for tagger
-        df3 = jetFlavourHelper.define(df3)
+        df3 = jetFlavourHelper_kt2.define(df3)
+        df3 = jetFlavourHelper_kt4.define(df3)
+        df3 = jetFlavourHelper_kt6.define(df3)
+        df3 = jetFlavourHelper_R5. define(df3)
+        df3 = jetFlavourHelper_R10.define(df3)
+        df3 = jetFlavourHelper_R15.define(df3)
 
         ## tagger inference
-        df3 = jetFlavourHelper.inference(weaver_preproc, weaver_model, df3)
+        df3 = jetFlavourHelper_kt2.inference(weaver_preproc, weaver_model, df3)
+        df3 = jetFlavourHelper_kt4.inference(weaver_preproc, weaver_model, df3)
+        df3 = jetFlavourHelper_kt6.inference(weaver_preproc, weaver_model, df3)
+        df3 = jetFlavourHelper_R5. inference(weaver_preproc, weaver_model, df3)
+        df3 = jetFlavourHelper_R10.inference(weaver_preproc, weaver_model, df3)
+        df3 = jetFlavourHelper_R15.inference(weaver_preproc, weaver_model, df3)
 
+        # is this needed?
+        # no, this is just variables for output
         df3 = df3.Define(
-            "jets_p4",
+            "jets_kt2_p4",
             "JetConstituentsUtils::compute_tlv_jets({})".format(
-                jetClusteringHelper.jets
+                jetClusteringHelper_kt2.jets
             ),
         )
+        
 
-        df3 = (df3.Define("recojet_px",           "JetClusteringUtils::get_px({})".format(jetClusteringHelper.jets))
-                 .Define("recojet_py",           "JetClusteringUtils::get_py({})".format(jetClusteringHelper.jets))
-                 .Define("recojet_pz",           "JetClusteringUtils::get_pz({})".format(jetClusteringHelper.jets))
-                 .Define("recojet_phi",          "JetClusteringUtils::get_phi({})".format(jetClusteringHelper.jets))
-                 .Define("recojet_eta",          "JetClusteringUtils::get_eta({})".format(jetClusteringHelper.jets))
-                 .Define("recojet_energy",       "JetClusteringUtils::get_e({})".format(jetClusteringHelper.jets))
-                 .Define("recojet_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper.jets))
+
+        df3 = (df3.Define("jet_kt2_px",           "JetClusteringUtils::get_px({})".format(jetClusteringHelper_kt2.jets))
+                  .Define("jet_kt2_py",           "JetClusteringUtils::get_py({})".format(jetClusteringHelper_kt2.jets))
+                  .Define("jet_kt2_pz",           "JetClusteringUtils::get_pz({})".format(jetClusteringHelper_kt2.jets))
+                  .Define("jet_kt2_phi",          "JetClusteringUtils::get_phi({})".format(jetClusteringHelper_kt2.jets))
+                  .Define("jet_kt2_eta",          "JetClusteringUtils::get_eta({})".format(jetClusteringHelper_kt2.jets))
+                  .Define("jet_kt2_energy",       "JetClusteringUtils::get_e({})".format(jetClusteringHelper_kt2.jets))
+                  .Define("jet_kt2_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper_kt2.jets))
         )
-        df3 = df3.Define("recojet_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper.jets) )
+        df3 = df3.Define("jet_kt2_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper_kt2.jets) )
+
+        df3 = (df3.Define("jet_kt4_px",           "JetClusteringUtils::get_px({})".format(jetClusteringHelper_kt4.jets))
+                  .Define("jet_kt4_py",           "JetClusteringUtils::get_py({})".format(jetClusteringHelper_kt4.jets))
+                  .Define("jet_kt4_pz",           "JetClusteringUtils::get_pz({})".format(jetClusteringHelper_kt4.jets))
+                  .Define("jet_kt4_phi",          "JetClusteringUtils::get_phi({})".format(jetClusteringHelper_kt4.jets))
+                  .Define("jet_kt4_eta",          "JetClusteringUtils::get_eta({})".format(jetClusteringHelper_kt4.jets))
+                  .Define("jet_kt4_energy",       "JetClusteringUtils::get_e({})".format(jetClusteringHelper_kt4.jets))
+                  .Define("jet_kt4_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper_kt4.jets))
+        )
+        df3 = df3.Define("jet_kt4_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper_kt4.jets) )
+
+        df3 = (df3.Define("jet_kt6_px",           "JetClusteringUtils::get_px({})".format(jetClusteringHelper_kt6.jets))
+                  .Define("jet_kt6_py",           "JetClusteringUtils::get_py({})".format(jetClusteringHelper_kt6.jets))
+                  .Define("jet_kt6_pz",           "JetClusteringUtils::get_pz({})".format(jetClusteringHelper_kt6.jets))
+                  .Define("jet_kt6_phi",          "JetClusteringUtils::get_phi({})".format(jetClusteringHelper_kt6.jets))
+                  .Define("jet_kt6_eta",          "JetClusteringUtils::get_eta({})".format(jetClusteringHelper_kt6.jets))
+                  .Define("jet_kt6_energy",       "JetClusteringUtils::get_e({})".format(jetClusteringHelper_kt6.jets))
+                  .Define("jet_kt6_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper_kt6.jets))
+        )
+        df3 = df3.Define("jet_kt6_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper_kt6.jets) )
+
+        df3 = (df3.Define("jet_R5_px",           "JetClusteringUtils::get_px({})".format(jetClusteringHelper_R5.jets))
+                  .Define("jet_R5_py",           "JetClusteringUtils::get_py({})".format(jetClusteringHelper_R5.jets))
+                  .Define("jet_R5_pz",           "JetClusteringUtils::get_pz({})".format(jetClusteringHelper_R5.jets))
+                  .Define("jet_R5_phi",          "JetClusteringUtils::get_phi({})".format(jetClusteringHelper_R5.jets))
+                  .Define("jet_R5_eta",          "JetClusteringUtils::get_eta({})".format(jetClusteringHelper_R5.jets))
+                  .Define("jet_R5_energy",       "JetClusteringUtils::get_e({})".format(jetClusteringHelper_R5.jets))
+                  .Define("jet_R5_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper_R5.jets))
+        )
+        df3 = df3.Define("jet_R5_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper_R5.jets) )
+        df3 = df3.Define("n_jets_R5",           "return jet_R5_flavor.size()")
+
+        df3 = (df3.Define("jet_R10_px",           "JetClusteringUtils::get_px({})".format(jetClusteringHelper_R10.jets))
+                  .Define("jet_R10_py",           "JetClusteringUtils::get_py({})".format(jetClusteringHelper_R10.jets))
+                  .Define("jet_R10_pz",           "JetClusteringUtils::get_pz({})".format(jetClusteringHelper_R10.jets))
+                  .Define("jet_R10_phi",          "JetClusteringUtils::get_phi({})".format(jetClusteringHelper_R10.jets))
+                  .Define("jet_R10_eta",          "JetClusteringUtils::get_eta({})".format(jetClusteringHelper_R10.jets))
+                  .Define("jet_R10_energy",       "JetClusteringUtils::get_e({})".format(jetClusteringHelper_R10.jets))
+                  .Define("jet_R10_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper_R10.jets))
+        )
+        df3 = df3.Define("jet_R10_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper_R10.jets) )
+        df3 = df3.Define("n_jets_R10",            "return jet_R10_flavor.size()")
+
+        df3 = (df3.Define("jet_R15_px",           "JetClusteringUtils::get_px({})".format(jetClusteringHelper_R15.jets))
+                  .Define("jet_R15_py",           "JetClusteringUtils::get_py({})".format(jetClusteringHelper_R15.jets))
+                  .Define("jet_R15_pz",           "JetClusteringUtils::get_pz({})".format(jetClusteringHelper_R15.jets))
+                  .Define("jet_R15_phi",          "JetClusteringUtils::get_phi({})".format(jetClusteringHelper_R15.jets))
+                  .Define("jet_R15_eta",          "JetClusteringUtils::get_eta({})".format(jetClusteringHelper_R15.jets))
+                  .Define("jet_R15_energy",       "JetClusteringUtils::get_e({})".format(jetClusteringHelper_R15.jets))
+                  .Define("jet_R15_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper_R15.jets))
+        )
+        df3 = df3.Define("jet_R15_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper_R15.jets) )
+        df3 = df3.Define("n_jets_R15",            "return jet_R15_flavor.size()")
         ## tagging ----------------------------------
 
 
@@ -443,14 +586,25 @@ class RDFanalysis():
                  "photon_px", "photon_py", "photon_pz", "photon_phi", "photon_eta", "photon_energy", "photon_mass", "photon_charge",
                  "Emiss_energy", "Emiss_p", "Emiss_px", "Emiss_py", "Emiss_pz", "Emiss_phi", "Emiss_eta",
                  "jet_default_px", "jet_default_py", "jet_default_pz", "jet_default_phi", "jet_default_eta", "jet_default_energy", "jet_default_mass", "jet_default_charge", "jet_default_btag",
-                 "n_jets_kt_exactly6", "n_jets_kt_upto6",  "n_jets_ee_genkt04", "n_jets_valencia", "n_jets_jade",
-                 "jet_kt_exactly6_px", "jet_kt_exactly6_py", "jet_kt_exactly6_pz", "jet_kt_exactly6_phi", "jet_kt_exactly6_eta", "jet_kt_exactly6_energy", "jet_kt_exactly6_mass", "jet_kt_exactly6_flavor",
-                 "jet_kt_upto6_px", "jet_kt_upto6_py", "jet_kt_upto6_pz", "jet_kt_upto6_phi", "jet_kt_upto6_eta", "jet_kt_upto6_energy", "jet_kt_upto6_mass", "jet_kt_upto6_flavor",
-                 "jet_ee_genkt04_px", "jet_ee_genkt04_py", "jet_ee_genkt04_pz", "jet_ee_genkt04_phi", "jet_ee_genkt04_eta", "jet_ee_genkt04_energy", "jet_ee_genkt04_mass", "jet_ee_genkt04_flavor",
+#                 "n_jets_kt_exactly6", "n_jets_kt_upto6",  "n_jets_ee_genkt04", "n_jets_valencia", "n_jets_jade",
+#                 "jet_kt_exactly6_px", "jet_kt_exactly6_py", "jet_kt_exactly6_pz", "jet_kt_exactly6_phi", "jet_kt_exactly6_eta", "jet_kt_exactly6_energy", "jet_kt_exactly6_mass", "jet_kt_exactly6_flavor",
+#                 "jet_kt_upto6_px", "jet_kt_upto6_py", "jet_kt_upto6_pz", "jet_kt_upto6_phi", "jet_kt_upto6_eta", "jet_kt_upto6_energy", "jet_kt_upto6_mass", "jet_kt_upto6_flavor",
+#                 "jet_ee_genkt04_px", "jet_ee_genkt04_py", "jet_ee_genkt04_pz", "jet_ee_genkt04_phi", "jet_ee_genkt04_eta", "jet_ee_genkt04_energy", "jet_ee_genkt04_mass", "jet_ee_genkt04_flavor",
                  "jet_valencia_px", "jet_valencia_py", "jet_valencia_pz", "jet_valencia_phi", "jet_valencia_eta", "jet_valencia_energy", "jet_valencia_mass", "jet_valencia_flavor",
                  "jet_jade_px", "jet_jade_py", "jet_jade_pz", "jet_jade_phi", "jet_jade_eta", "jet_jade_energy", "jet_jade_mass", "jet_jade_flavor"
                 ]
 
-        branchList += jetFlavourHelper.outputBranches() ## tagging
-        branchList += ["recojet_px", "recojet_py", "recojet_pz", "recojet_phi", "recojet_eta", "recojet_energy", "recojet_mass", "recojet_flavor"]
+        branchList += jetFlavourHelper_kt2.outputBranches() ## tagging
+        branchList += jetFlavourHelper_kt4.outputBranches()
+        branchList += jetFlavourHelper_kt6.outputBranches()
+        branchList += jetFlavourHelper_R5. outputBranches()
+        branchList += jetFlavourHelper_R10.outputBranches()
+        branchList += jetFlavourHelper_R15.outputBranches()
+        branchList += ["jet_kt2_px", "jet_kt2_py", "jet_kt2_pz", "jet_kt2_phi", "jet_kt2_eta", "jet_kt2_energy", "jet_kt2_mass", "jet_kt2_flavor"]
+        branchList += ["jet_kt4_px", "jet_kt4_py", "jet_kt4_pz", "jet_kt4_phi", "jet_kt4_eta", "jet_kt4_energy", "jet_kt4_mass", "jet_kt4_flavor"]
+        branchList += ["jet_kt6_px", "jet_kt6_py", "jet_kt6_pz", "jet_kt6_phi", "jet_kt6_eta", "jet_kt6_energy", "jet_kt6_mass", "jet_kt6_flavor"]
+        branchList += ["jet_R5_px", "jet_R5_py", "jet_R5_pz", "jet_R5_phi", "jet_R5_eta", "jet_R5_energy", "jet_R5_mass", "jet_R5_flavor"]
+        branchList += ["jet_R10_px", "jet_R10_py", "jet_R10_pz", "jet_R10_phi", "jet_R10_eta", "jet_R10_energy", "jet_R10_mass", "jet_R10_flavor"]
+        branchList += ["jet_R15_px", "jet_R15_py", "jet_R15_pz", "jet_R15_phi", "jet_R15_eta", "jet_R15_energy", "jet_R15_mass", "jet_R15_flavor"]
+        branchList += ["n_jets_R5", "n_jets_R10", "n_jets_R15"]
         return branchList
