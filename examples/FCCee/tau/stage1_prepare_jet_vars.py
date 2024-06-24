@@ -3,15 +3,15 @@ import os, copy # tagging
 #Mandatory: List of processes
 processList = {
 
-#              'p8_ee_Ztautau_ecm91': {'chunks':10, 'fraction':0.01} # 100M events in total
+#              'p8_ee_Ztautau_ecm91': {'chunks':10, 'fraction':0.01}, # 100M events in total
 #              'p8_ee_Zbb_ecm91':     {'chunks':10, 'fraction':0.004}, # 500M events in total
 #              'p8_ee_Zcc_ecm91':     {'chunks':10, 'fraction':0.004}, # 500M events in total
-              'p8_ee_Zss_ecm91':     {'chunks':1, 'fraction':0.0000002}, # 500M events in total
+#              'p8_ee_Zss_ecm91':     {'chunks':1, 'fraction':0.0000002}, # 500M events in total
 #              'p8_ee_Zud_ecm91':     {'chunks':10, 'fraction':0.002} # 500M events in total
 #              'wzp6_ee_nunuH_Htautau_ecm240': {'chunks':12},
-#              'wzp6_ee_nunuH_Hbb_ecm240': {'chunks':12},
+#              'wzp6_ee_nunuH_Hbb_ecm240': {'chunks':1, 'fraction':0.002},
 #              'wzp6_ee_nunuH_Hcc_ecm240': {'chunks':11},
-#              'p8_ee_Zbb_ecm91_EvtGen_Bs2TauTau': {'chunks':50, 'fraction':0.5}
+              'p8_ee_Zbb_ecm91_EvtGen_Bs2TauTau': {'chunks':10, 'fraction':0.2}
             }
 
 #Mandatory: Production tag when running over EDM4Hep centrally produced events, this points to the yaml files for getting sample statistics
@@ -21,12 +21,12 @@ prodTag     = "FCCee/winter2023/IDEA/"
 outputDir   = "outputs/FCCee/tau/analysis_stage1/"
 
 #EOS output directory for batch jobs
-outputDirEos = "/eos/experiment/fcc/ee/analyses/case-studies/tau_test/flatNtuples_2024April/winter2023"
+outputDirEos = "/eos/experiment/fcc/ee/analyses/case-studies/tau_test/flatNtuples_2024June/winter2023"
 
 
 #Optional
 nCPUS       = 8
-runBatch    = False
+runBatch    = True
 batchQueue = "nextweek"
 compGroup = "group_u_FCC.local_gen"
 
@@ -95,6 +95,19 @@ class RDFanalysis():
                .Define("MC_PrimaryTracks",  "ReconstructedParticle2Track::getRP2TRK( MC_PrimaryTracks_RP, EFlowTrack_1)" )
                .Define("n_PrimaryTracks", "ReconstructedParticle::get_n(MC_PrimaryTracks_RP)")
 
+               .Define("MC_PDG",   "FCCAnalyses::MCParticle::get_pdg(Particle)")
+               .Define("MC_n",     "int(MC_PDG.size())")
+               .Define("MC_M1",    "myUtils::get_MCMother1(Particle,Particle0)")
+               .Define("MC_M2",    "myUtils::get_MCMother2(Particle,Particle0)")
+               .Define("MC_D1",    "myUtils::get_MCDaughter1(Particle,Particle1)")
+               .Define("MC_D2",    "myUtils::get_MCDaughter2(Particle,Particle1)")
+               .Define("MC_px",    "FCCAnalyses::MCParticle::get_px(Particle)")
+               .Define("MC_py",    "FCCAnalyses::MCParticle::get_py(Particle)")
+               .Define("MC_pz",    "FCCAnalyses::MCParticle::get_pz(Particle)")
+               .Define("MC_eta",   "FCCAnalyses::MCParticle::get_eta(Particle)")
+               .Define("MC_phi",   "FCCAnalyses::MCParticle::get_phi(Particle)")
+               .Define("MC_mass",  "FCCAnalyses::MCParticle::get_mass(Particle)")
+
                .Define("genTau",   "FCCAnalyses::MCParticle::sel_pdgID(15, true)(Particle)")
                .Define("genMuon",     "FCCAnalyses::MCParticle::sel_pdgID(13, true)(Particle)")
                .Define("genElectron", "FCCAnalyses::MCParticle::sel_pdgID(11, true)(Particle)")
@@ -114,6 +127,76 @@ class RDFanalysis():
                .Define("genTau_charge", "FCCAnalyses::MCParticle::get_charge(genTau)")
                .Define("genTau_pdg",    "FCCAnalyses::MCParticle::get_pdg(genTau)")
                .Define("genTau_parentPDG", "FCCAnalyses::MCParticle::get_leptons_origin(genTau,Particle,Particle0)")
+
+               .Define("ind_tauneg_MuNuNu",       "FCCAnalyses::MCParticle::get_indices(  15, {13,-14,16},            true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_tauneg_MuNuNu_Phot",  "FCCAnalyses::MCParticle::get_indices(  15, {13,-14,16,22},         true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_tauneg_ENuNu",        "FCCAnalyses::MCParticle::get_indices(  15, {11,-12,16},            true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_tauneg_ENuNu_Phot",   "FCCAnalyses::MCParticle::get_indices(  15, {11,-12,16,22},         true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_tauneg_PiNu",         "FCCAnalyses::MCParticle::get_indices(  15, {-211,16},              true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_tauneg_PiNu_Phot",    "FCCAnalyses::MCParticle::get_indices(  15, {-211,16,22},           true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_tauneg_KNu",          "FCCAnalyses::MCParticle::get_indices(  15, {-321,16},              true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_tauneg_KNu_Phot",     "FCCAnalyses::MCParticle::get_indices(  15, {-321,16,22},           true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_tauneg_PiK0Nu",       "FCCAnalyses::MCParticle::get_indices(  15, {-211,-311,16},         true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_tauneg_PiK0Nu_Phot",  "FCCAnalyses::MCParticle::get_indices(  15, {-211,-311,16,22},      true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_tauneg_KK0Nu",        "FCCAnalyses::MCParticle::get_indices(  15, {-321,311,16},          true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_tauneg_KK0Nu_Phot",   "FCCAnalyses::MCParticle::get_indices(  15, {-321,311,16,22},       true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_tauneg_3PiNu",        "FCCAnalyses::MCParticle::get_indices(  15, {-211,-211,211,16},     true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_tauneg_3PiNu_Phot",   "FCCAnalyses::MCParticle::get_indices(  15, {-211,-211,211,16,22},  true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_tauneg_PiKKNu",       "FCCAnalyses::MCParticle::get_indices(  15, {-211,-321,321,16},     true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_tauneg_PiKKNu_Phot",  "FCCAnalyses::MCParticle::get_indices(  15, {-211,-321,321,16,22},  true, false, false, true)  ( Particle, Particle1)" )
+
+               .Define("ind_taupos_MuNuNu",       "FCCAnalyses::MCParticle::get_indices( -15, {-13,14,-16},           true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_taupos_MuNuNu_Phot",  "FCCAnalyses::MCParticle::get_indices( -15, {-13,14,-16,22},        true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_taupos_ENuNu",        "FCCAnalyses::MCParticle::get_indices( -15, {-11,12,-16},           true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_taupos_ENuNu_Phot",   "FCCAnalyses::MCParticle::get_indices( -15, {-11,12,-16,22},        true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_taupos_PiNu",         "FCCAnalyses::MCParticle::get_indices( -15, {211,-16},              true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_taupos_PiNu_Phot",    "FCCAnalyses::MCParticle::get_indices( -15, {211,-16,22},           true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_taupos_KNu",          "FCCAnalyses::MCParticle::get_indices( -15, {321,-16},              true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_taupos_KNu_Phot",     "FCCAnalyses::MCParticle::get_indices( -15, {321,-16,22},           true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_taupos_PiK0Nu",       "FCCAnalyses::MCParticle::get_indices( -15, {211,311,-16},          true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_taupos_PiK0Nu_Phot",  "FCCAnalyses::MCParticle::get_indices( -15, {211,311,-16,22},       true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_taupos_KK0Nu",        "FCCAnalyses::MCParticle::get_indices( -15, {321,-311,-16},         true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_taupos_KK0Nu_Phot",   "FCCAnalyses::MCParticle::get_indices( -15, {321,-311,-16,22},      true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_taupos_3PiNu",        "FCCAnalyses::MCParticle::get_indices( -15, {211,211,-211,-16},     true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_taupos_3PiNu_Phot",   "FCCAnalyses::MCParticle::get_indices( -15, {211,211,-211,-16,22},  true, false, false, true)  ( Particle, Particle1)" )
+               .Define("ind_taupos_PiKKNu",       "FCCAnalyses::MCParticle::get_indices( -15, {211,321,-321,-16},     true, false, false, false) ( Particle, Particle1)" )
+               .Define("ind_taupos_PiKKNu_Phot",  "FCCAnalyses::MCParticle::get_indices( -15, {211,321,-321,-16,22},  true, false, false, true)  ( Particle, Particle1)" )
+
+               .Define("n_TauNeg_MuNuNu",       "return int(ind_tauneg_MuNuNu.size() )"     )
+               .Define("n_TauNeg_MuNuNu_Phot",  "return int(ind_tauneg_MuNuNu_Phot.size() )")
+               .Define("n_TauNeg_ENuNu",        "return int(ind_tauneg_ENuNu.size() )"      )
+               .Define("n_TauNeg_ENuNu_Phot",   "return int(ind_tauneg_ENuNu_Phot.size() )" )
+               .Define("n_TauNeg_PiNu",         "return int(ind_tauneg_PiNu.size() )"       )
+               .Define("n_TauNeg_PiNu_Phot",    "return int(ind_tauneg_PiNu_Phot.size() )"  )
+               .Define("n_TauNeg_KNu",          "return int(ind_tauneg_KNu.size() )"        )
+               .Define("n_TauNeg_KNu_Phot",     "return int(ind_tauneg_KNu_Phot.size() )"   )
+               .Define("n_TauNeg_PiK0Nu",       "return int(ind_tauneg_PiK0Nu.size() )"     )
+               .Define("n_TauNeg_PiK0Nu_Phot",  "return int(ind_tauneg_PiK0Nu_Phot.size() )")
+               .Define("n_TauNeg_KK0Nu",        "return int(ind_tauneg_KK0Nu.size() )"      )
+               .Define("n_TauNeg_KK0Nu_Phot",   "return int(ind_tauneg_KK0Nu_Phot.size() )" )
+               .Define("n_TauNeg_3PiNu",        "return int(ind_tauneg_3PiNu.size() )"      )
+               .Define("n_TauNeg_3PiNu_Phot",   "return int(ind_tauneg_3PiNu_Phot.size() )" )
+               .Define("n_TauNeg_PiKKNu",       "return int(ind_tauneg_PiKKNu.size() )"     )
+               .Define("n_TauNeg_PiKKNu_Phot",  "return int(ind_tauneg_PiKKNu_Phot.size() )")
+                                                 
+               .Define("n_TauPos_MuNuNu",       "return int(ind_taupos_MuNuNu.size() )"     )
+               .Define("n_TauPos_MuNuNu_Phot",  "return int(ind_taupos_MuNuNu_Phot.size() )")
+               .Define("n_TauPos_ENuNu",        "return int(ind_taupos_ENuNu.size() )"      )
+               .Define("n_TauPos_ENuNu_Phot",   "return int(ind_taupos_ENuNu_Phot.size() )" )
+               .Define("n_TauPos_PiNu",         "return int(ind_taupos_PiNu.size() )"       )
+               .Define("n_TauPos_PiNu_Phot",    "return int(ind_taupos_PiNu_Phot.size() )"  )
+               .Define("n_TauPos_KNu",          "return int(ind_taupos_KNu.size() )"        )
+               .Define("n_TauPos_KNu_Phot",     "return int(ind_taupos_KNu_Phot.size() )"   )
+               .Define("n_TauPos_PiK0Nu",       "return int(ind_taupos_PiK0Nu.size() )"     )
+               .Define("n_TauPos_PiK0Nu_Phot",  "return int(ind_taupos_PiK0Nu_Phot.size() )")
+               .Define("n_TauPos_KK0Nu",        "return int(ind_taupos_KK0Nu.size() )"      )
+               .Define("n_TauPos_KK0Nu_Phot",   "return int(ind_taupos_KK0Nu_Phot.size() )" )
+               .Define("n_TauPos_3PiNu",        "return int(ind_taupos_3PiNu.size() )"      )
+               .Define("n_TauPos_3PiNu_Phot",   "return int(ind_taupos_3PiNu_Phot.size() )" )
+               .Define("n_TauPos_PiKKNu",       "return int(ind_taupos_PiKKNu.size() )"     )
+               .Define("n_TauPos_PiKKNu_Phot",  "return int(ind_taupos_PiKKNu_Phot.size() )")
+
+
 
                .Alias("Muon0",      "Muon#0.index")
                .Alias("Electron0",  "Electron#0.index")
@@ -274,7 +357,7 @@ class RDFanalysis():
                   .Define("jet_kt2_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper_kt2.jets))
         )
         df3 = df3.Define("jet_kt2_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper_kt2.jets) )
-        df3 = df3.Define("pfcand_PID_kt2", "JetConstituentsUtils::get_PIDs(MCRecoAssociations0,MCRecoAssociations1,ReconstructedParticles,Particle,_jet_kt2)")
+        #df3 = df3.Define("pfcand_PID_kt2", "JetConstituentsUtils::get_PIDs(MCRecoAssociations0,MCRecoAssociations1,ReconstructedParticles,Particle,_jet_kt2)")
 
 
         df3 = (df3.Define("jet_R5_px",           "JetClusteringUtils::get_px({})".format(jetClusteringHelper_R5.jets))
@@ -286,8 +369,8 @@ class RDFanalysis():
                   .Define("jet_R5_mass",         "JetClusteringUtils::get_m({})".format(jetClusteringHelper_R5.jets))
         )
         df3 = df3.Define("jet_R5_flavor", "JetTaggingUtils::get_flavour({}, Particle)".format(jetClusteringHelper_R5.jets) )
-        df3 = df3.Define("n_jets_R5",           "return jet_R5_flavor.size()")
-        df3 = df3.Define("pfcand_PID_R5", "JetConstituentsUtils::get_PIDs(MCRecoAssociations0,MCRecoAssociations1,ReconstructedParticles,Particle,_jet_R5)")
+        df3 = df3.Define("n_jets_R5",           "return int(jet_R5_flavor.size())")
+        #df3 = df3.Define("pfcand_PID_R5", "JetConstituentsUtils::get_PIDs(MCRecoAssociations0,MCRecoAssociations1,ReconstructedParticles,Particle,_jet_R5)")
         ## tagging ----------------------------------
 
 
@@ -306,6 +389,11 @@ class RDFanalysis():
                  "Emiss_energy", "Emiss_p", "Emiss_px", "Emiss_py", "Emiss_pz", "Emiss_phi", "Emiss_eta",
                 ]
 
+        branchList += [
+                "MC_PDG","MC_M1","MC_M2","MC_n","MC_D1","MC_D2",
+                "MC_px", "MC_py", "MC_pz", "MC_eta", "MC_phi", "MC_mass", 
+                ]
+
         branchList += [ 
                 "nTau23PiCandidates", "Tau23PiCandidates_mass", "Tau23PiCandidates_B",
                 "Tau23PiCandidates_px", "Tau23PiCandidates_py", "Tau23PiCandidates_pz", "Tau23PiCandidates_p", "Tau23PiCandidates_q",
@@ -319,11 +407,48 @@ class RDFanalysis():
                 "Tau23PiCandidates_pion3p", "Tau23PiCandidates_pion3q", "Tau23PiCandidates_pion3d0", "Tau23PiCandidates_pion3z0",         
                 ]
 
+        branchList += [
+               "n_TauNeg_MuNuNu",       
+               "n_TauNeg_MuNuNu_Phot",  
+               "n_TauNeg_ENuNu",        
+               "n_TauNeg_ENuNu_Phot",   
+               "n_TauNeg_PiNu",         
+               "n_TauNeg_PiNu_Phot",    
+               "n_TauNeg_KNu",          
+               "n_TauNeg_KNu_Phot",     
+               "n_TauNeg_PiK0Nu",       
+               "n_TauNeg_PiK0Nu_Phot",  
+               "n_TauNeg_KK0Nu",        
+               "n_TauNeg_KK0Nu_Phot",   
+               "n_TauNeg_3PiNu",        
+               "n_TauNeg_3PiNu_Phot",   
+               "n_TauNeg_PiKKNu",       
+               "n_TauNeg_PiKKNu_Phot",  
+
+               "n_TauPos_MuNuNu",       
+               "n_TauPos_MuNuNu_Phot",  
+               "n_TauPos_ENuNu",        
+               "n_TauPos_ENuNu_Phot",   
+               "n_TauPos_PiNu",         
+               "n_TauPos_PiNu_Phot",    
+               "n_TauPos_KNu",          
+               "n_TauPos_KNu_Phot",     
+               "n_TauPos_PiK0Nu",       
+               "n_TauPos_PiK0Nu_Phot",  
+               "n_TauPos_KK0Nu",        
+               "n_TauPos_KK0Nu_Phot",   
+               "n_TauPos_3PiNu",        
+               "n_TauPos_3PiNu_Phot",   
+               "n_TauPos_PiKKNu",       
+               "n_TauPos_PiKKNu_Phot",  
+                ]
+
+
         branchList += jetFlavourHelper_kt2.outputBranches() ## tagging
         branchList += jetFlavourHelper_R5. outputBranches()
         branchList += [obs for obs in jetFlavourHelper_kt2.definition.keys() if "pfcand_" in obs]## tagging
         branchList += [obs for obs in jetFlavourHelper_R5. definition.keys() if "pfcand_" in obs]
-        branchList += ["pfcand_PID_kt2", "pfcand_PID_R5"]
+        #branchList += ["pfcand_PID_kt2", "pfcand_PID_R5"]
         #branchList += [obs for obs in jetClusteringHelper_kt2.definition.keys() if "jet_" in obs and "_jet_" not in obs]
         #branchList += [obs for obs in jetClusteringHelper_R5.definition.keys() if "jet_" in obs and "_jet_" not in obs]
         #branchList = [item for item in branchList if item not in ["jet_kt2","jet_R5"]]
