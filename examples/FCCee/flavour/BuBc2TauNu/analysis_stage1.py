@@ -13,48 +13,60 @@ outputDirEos_training   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/
 
 #analysis_stage1
 processList_analysis = {
-    'p8_ee_Zbb_ecm91':{'chunks':50},
-    'p8_ee_Zcc_ecm91':{'chunks':50},
-    'p8_ee_Zuds_ecm91':{'chunks':50},
+    'p8_ee_Zbb_ecm91':{'chunks':10, 'fraction':0.01},
+    'p8_ee_Zcc_ecm91':{'chunks':10, 'fraction':0.01},
+    'p8_ee_Zss_ecm91':{'chunks':10, 'fraction':0.01},
+    'p8_ee_Zud_ecm91':{'chunks':10, 'fraction':0.01},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2TauTauTAUHADNU':{'chunks':10, 'fraction':0.1},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2TauTau':{'chunks':10, 'fraction':0.1},
+}
 
-    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50},
+processList_analysis = {
+#    'p8_ee_Zbb_ecm91':{'chunks':50},
+#    'p8_ee_Zcc_ecm91':{'chunks':50},
+#    'p8_ee_Zuds_ecm91':{'chunks':50},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2TauNuTAUHADNU':{'chunks':50},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{'chunks':50},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{'chunks':50},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0TauNu':{'chunks':50},
+#
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{'chunks':50},
+#    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50}
 
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2D3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2Dst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bd2DstTauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2Ds3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2Dsst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bs2DsstTauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D03Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0Ds':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2D0TauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst03Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Ds':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0Dsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Bu2Dst0TauNu':{'chunks':50},
-
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lc3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcTauNu':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2Lcst3Pi':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDs':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstDsst':{'chunks':50},
-    'p8_ee_Zbb_ecm91_EvtGen_Lb2LcstTauNu':{'chunks':50}
+    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':1, 'fraction':0.0001},
     }
 prodTag_analysis     = "FCCee/spring2021/IDEA/"
 outputDirEos_analysis   = "/eos/experiment/fcc/ee/analyses/case-studies/flavour/BuBc2TauNu/flatNtuples/spring2021/prod_04/analysis_stage1/"
 
+#outputDirEos_analysis   = "/eos/experiment/fcc/ee/analyses_storage/flavor/Bs_tau_tau_alejandro"
 
 processList  = processList_analysis
 outputDirEos = outputDirEos_analysis
@@ -68,8 +80,10 @@ if runTraining:
     MVAFilter    = "EVT_MVA1>-1.0"
 
 outputDir   = ""
+outputDir   = "outputs/FCCee/flavor/BuBc/analysis_stage1/"
+
 nCPUS       = 8
-runBatch    = True
+runBatch    = False
 batchQueue  = "workday"
 compGroup   = "group_u_FCC.local_gen"
 
@@ -210,7 +224,7 @@ class RDFanalysis():
 
                .Define("EVT_thrustNP",      'Algorithms::minimize_thrust("Minuit2","Migrad")(RP_px, RP_py, RP_pz)')
                .Define("RP_thrustangleNP",  'Algorithms::getAxisCosTheta(EVT_thrustNP, RP_px, RP_py, RP_pz)')
-               .Define("EVT_thrust",        'Algorithms::getThrustPointing(RP_thrustangleNP, RP_e, EVT_thrustNP, 1.)')
+               .Define("EVT_thrust",        'Algorithms::getThrustPointing(1.)(RP_thrustangleNP, RP_e, EVT_thrustNP)')
                .Define("RP_thrustangle",    'Algorithms::getAxisCosTheta(EVT_thrust, RP_px, RP_py, RP_pz)')
 
 
@@ -263,7 +277,7 @@ class RDFanalysis():
                .Define("DV_z0",            "myUtils::get_trackz0(DV_tracks)")
 
                ###Build MVA with only thrust info
-               .Define("MVAVec1", ROOT.computeModel1, ("EVT_ThrustEmin_E",        "EVT_ThrustEmax_E",
+               .Define("MVAVec1", ROOT.computeModel1, ["EVT_ThrustEmin_E",        "EVT_ThrustEmax_E",
                                                      "EVT_ThrustEmin_Echarged", "EVT_ThrustEmax_Echarged",
                                                      "EVT_ThrustEmin_Eneutral", "EVT_ThrustEmax_Eneutral",
                                                      "EVT_ThrustEmin_Ncharged", "EVT_ThrustEmax_Ncharged",
@@ -271,7 +285,7 @@ class RDFanalysis():
                                                      "EVT_NtracksPV",           "EVT_NVertex",
                                                      "EVT_NTau23Pi",            "EVT_ThrustEmin_NDV",
                                                      "EVT_ThrustEmax_NDV",      "EVT_dPV2DVmin",
-                                                     "EVT_dPV2DVmax",           "EVT_dPV2DVave"))
+                                                     "EVT_dPV2DVmax",           "EVT_dPV2DVave"])
                .Define("EVT_MVA1", "MVAVec1.at(0)")
                .Filter(MVAFilter)
 
