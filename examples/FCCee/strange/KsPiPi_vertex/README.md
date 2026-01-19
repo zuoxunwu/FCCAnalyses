@@ -22,8 +22,8 @@ source ./setup.sh
 
 ##### analysis scripts
 
-`analysis_stage1_simple_example.py` is a simple script to process data. It reads raw sample files, calculate necessary variable, and save output files as a flat ROOT tree.
-It contains some (hopefully self-explanatory) comments for each step of calculation.
+`analysis_stage1_simple_example.py` is a simple script to process data. It reads raw sample files, calculate necessary variable, and save output files as a flat ROOT tree.  
+It contains some (hopefully self-explanatory) comments for each step of calculation.  
 The goal of the exercise is to expand this script to also study the properties of Lambda hadron decays, in a similar manner that is done for K\_S.
 
 `analysis_stage1_full_from_Xunwu.py` is the full script, or the "solution" to the exercise.
@@ -55,4 +55,4 @@ In case of questions, ask
 Xunwu Zuo <xunwu.zuo@cern.ch> \
 Radoslav Marchevski <radoslav.marchevski@cern.ch> \
 Michele Selvaggi <Michele.Selvaggi@cern.ch> \
-Stephane Monteil <monteil@in2p3.fr> \
+Stephane Monteil <monteil@in2p3.fr>
