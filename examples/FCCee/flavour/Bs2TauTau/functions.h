@@ -291,6 +291,93 @@ ROOT::VecOps::RVec<TLorentzVector> build_p4(ROOT::VecOps::RVec<float> px, ROOT::
 //}
 
 
+//ROOT::VecOps::RVec<edm4hep::TrackerHitData> CollectTrackerHits(const ROOT::VecOps::RVec<edm4hep::TrackData>& tracks,
+//                                                           const ROOT::VecOps::RVec<edm4hep::TrackerHitData>& allHits) {   // in RDF this class is made into <edm4hep::TrackerHitData> instead of <edm4hep::TrackerHit>
+//    ROOT::VecOps::RVec<edm4hep::TrackerHitData> result;
+//    for (auto & trk : tracks) {
+//	for (auto it_hit = trk.trackerHits_begin; it_hit != trk.trackerHits_end; ++it_hit) { 
+//          result.emplace_back(allHits.at(it_hit));   
+//        }
+//    }
+//    return result;
+//}
+//
+//ROOT::VecOps::RVec<float> get_x(const ROOT::VecOps::RVec<edm4hep::TrackerHitData>& in) {
+//  ROOT::VecOps::RVec<float> result;
+//  for (auto & hit: in) {
+//    result.push_back(hit.position.x);
+//  }
+//  return result;
+//}
+//
+//ROOT::VecOps::RVec<float> get_y(const ROOT::VecOps::RVec<edm4hep::TrackerHitData>& in) {
+//  ROOT::VecOps::RVec<float> result;
+//  for (auto & hit: in) {
+//    result.push_back(hit.position.y);
+//  }
+//  return result;
+//}
+//
+//ROOT::VecOps::RVec<float> get_z(const ROOT::VecOps::RVec<edm4hep::TrackerHitData>& in) {
+//  ROOT::VecOps::RVec<float> result;
+//  for (auto & hit: in) {
+//    result.push_back(hit.position.z);
+//  }
+//  return result;
+//}
+//
+//
+//ROOT::VecOps::RVec<edm4hep::CalorimeterHitData> CollectCaloHits(const ROOT::VecOps::RVec<edm4hep::ClusterData>& clusters,
+//                                                                const ROOT::VecOps::RVec<edm4hep::CalorimeterHitData>& allHits) {   // in RDF this class is made into <edm4hep::TrackerHitData> instead of <edm4hep::TrackerHit>
+//    ROOT::VecOps::RVec<edm4hep::CalorimeterHitData> result;
+//    for (auto & clu : clusters) {
+//        for (auto it_hit = clu.hits_begin; it_hit != trk.hits_end; ++it_hit) {
+//          result.emplace_back(allHits.at(it_hit));
+//        }
+//    }
+//    return result;
+//}
+//
+//
+//
+//
+//ROOT::VecOps::RVec<float> sel_CaloHits (const ROOT::VecOps::RVec<edm4hep::CalorimeterHitData>& in,
+//                                        const ROOT::VecOps::RVec<int>& hit_idx ){
+//  ROOT::VecOps::RVec<edm4hep::CalorimeterHitData> result;
+//  for (auto & i: hit_idx){
+//    result.push_back(in.at(i));
+//  }
+//  return result;
+//}
+//
+//ROOT::VecOps::RVec<float> sel_CaloHit_x (const ROOT::VecOps::RVec<edm4hep::CalorimeterHitData>& in,
+//		                         const ROOT::VecOps::RVec<int>& hit_idx ){
+//  ROOT::VecOps::RVec<float> result;
+//  for (int i=0; i< hit_idx.size(); ++i){ 
+//    result.push_back(in.at(hit_idx.at(i)).position.x);
+//  }
+//  return result;
+//}
+//
+//ROOT::VecOps::RVec<float> sel_CaloHit_y (const ROOT::VecOps::RVec<edm4hep::CalorimeterHitData>& in,
+//                                         const ROOT::VecOps::RVec<int>& hit_idx ){
+//  ROOT::VecOps::RVec<float> result;
+//  for (auto & idx: hit_idx){
+//    result.push_back(in.at(idx).position.y);
+//  }
+//  return result;
+//}
+//
+//ROOT::VecOps::RVec<float> sel_CaloHit_z (const ROOT::VecOps::RVec<edm4hep::CalorimeterHitData>& in,
+//                                         const ROOT::VecOps::RVec<int>& hit_idx ){
+//  ROOT::VecOps::RVec<float> result;
+//  for (auto & idx: hit_idx){
+//    result.push_back(in.at(idx).position.z);
+//  }
+//  return result;
+//}
+
+
 }}
 
 #endif
