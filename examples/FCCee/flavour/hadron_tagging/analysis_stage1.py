@@ -38,7 +38,7 @@ prodTag     = "FCCee/winter2023/IDEA/"
 
 # if runBatch = True, save output on eos
 #outputDirEos   = "/eos/experiment/fcc/ee/analyses_storage/flavor/Bs2TauTau/flatNtuples/winter2023/analysis_stage1_noFilter_fullP4/"
-outputDirEos   = "/eos/experiment/fcc/ee/analyses_storage/flavor/hadron_tagging/flatNtuples/winter2023/all_tags_fixPVassoc"
+outputDirEos   = "/eos/experiment/fcc/ee/analyses_storage/flavor/hadron_tagging/flatNtuples/winter2023/all_tags_PVbackinVert"
 
 # if runBatch = False, save output locally
 outputDir   = "outputs/FCCee/flavor/hadron_tagging/analysis_stage1/"
@@ -406,41 +406,30 @@ class RDFanalysis():
                .Define("RP_fromBd_Emin",         "RP_fromBd[RP_thrustangle>0]")
                .Define("RP_fromLb_Emin",         "RP_fromLb[RP_thrustangle>0]")
                .Define("RP_thrustangle_Emin",    "RP_thrustangle[RP_thrustangle>0]")
-               .Define("Vertex_mass_Emin",       "Vertex_mass     [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_px_Emin",         "Vertex_px       [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_py_Emin",         "Vertex_py       [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_pz_Emin",         "Vertex_pz       [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_e_Emin",          "Vertex_e        [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_x_Emin",          "Vertex_x        [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_y_Emin",          "Vertex_y        [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_z_Emin",          "Vertex_z        [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_xErr_Emin",       "Vertex_xErr     [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_yErr_Emin",       "Vertex_yErr     [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_zErr_Emin",       "Vertex_zErr     [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_ntrk_Emin",       "Vertex_ntrk     [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_chi2_Emin",       "Vertex_chi2     [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_d2PV_Emin",       "Vertex_d2PV     [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_d2PVSig_Emin",    "Vertex_d2PVSig  [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_Dphi_Emin",       "Vertex_phi      [Vertex_thrust_angle>0 && Vertex_isPV!=1] - EVT_thrust_phi")
-               .Define("Vertex_Dtheta_Emin",     "Vertex_theta    [Vertex_thrust_angle>0 && Vertex_isPV!=1] - EVT_thrust_theta")
-               .Define("Vertex_thrustangle_Emin","Vertex_thrust_angle    [Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromBc_Emin",     "Vertex_fromBc[Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromBs_Emin",     "Vertex_fromBs[Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromBu_Emin",     "Vertex_fromBu[Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromBd_Emin",     "Vertex_fromBd[Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromLb_Emin",     "Vertex_fromLb[Vertex_thrust_angle>0 && Vertex_isPV!=1]")
-               .Define("PV_x_Emin",              " PV_x")
-               .Define("PV_y_Emin",              " PV_y")
-               .Define("PV_z_Emin",              " PV_z")
-               .Define("PV_ntrk_Emin",           " PV_ntrk")
-               .Define("PV_mass_Emin",           " PV_mass")
-               .Define("PV_px_Emin",             " PV_px")
-               .Define("PV_py_Emin",             " PV_py")
-               .Define("PV_pz_Emin",             " PV_pz")
-               .Define("PV_e_Emin",              " PV_e")
-               .Define("PV_thrust_angle_Emin",   " PV_thrust_angle")
-               .Define("PV_Dphi_Emin",           " PV_Dphi")
-               .Define("PV_Dtheta_Emin",         " PV_Dtheta")
+               .Define("Vertex_isPV_Emin",       "Vertex_isPV     [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_mass_Emin",       "Vertex_mass     [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_px_Emin",         "Vertex_px       [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_py_Emin",         "Vertex_py       [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_pz_Emin",         "Vertex_pz       [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_e_Emin",          "Vertex_e        [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_x_Emin",          "Vertex_x        [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_y_Emin",          "Vertex_y        [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_z_Emin",          "Vertex_z        [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_xErr_Emin",       "Vertex_xErr     [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_yErr_Emin",       "Vertex_yErr     [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_zErr_Emin",       "Vertex_zErr     [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_ntrk_Emin",       "Vertex_ntrk     [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_chi2_Emin",       "Vertex_chi2     [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_d2PV_Emin",       "Vertex_d2PV     [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_d2PVSig_Emin",    "Vertex_d2PVSig  [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_Dphi_Emin",       "Vertex_phi      [Vertex_thrust_angle>0 || Vertex_isPV==1] - EVT_thrust_phi")
+               .Define("Vertex_Dtheta_Emin",     "Vertex_theta    [Vertex_thrust_angle>0 || Vertex_isPV==1] - EVT_thrust_theta")
+               .Define("Vertex_thrustangle_Emin","Vertex_thrust_angle    [Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_fromBc_Emin",     "Vertex_fromBc[Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_fromBs_Emin",     "Vertex_fromBs[Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_fromBu_Emin",     "Vertex_fromBu[Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_fromBd_Emin",     "Vertex_fromBd[Vertex_thrust_angle>0 || Vertex_isPV==1]")
+               .Define("Vertex_fromLb_Emin",     "Vertex_fromLb[Vertex_thrust_angle>0 || Vertex_isPV==1]")
                .Define("n_Bc_Emin",              "int(genBc_thrustangle[genBc_thrustangle>0].size())")
                .Define("n_Bs_Emin",              "int(genBs_thrustangle[genBs_thrustangle>0].size())")
                .Define("n_Bu_Emin",              "int(genBu_thrustangle[genBu_thrustangle>0].size())")
@@ -484,41 +473,31 @@ class RDFanalysis():
                .Define("RP_fromBd_Emax",         "RP_fromBd[RP_thrustangle<0]")
                .Define("RP_fromLb_Emax",         "RP_fromLb[RP_thrustangle<0]")
                .Define("RP_thrustangle_Emax",    "- RP_thrustangle[RP_thrustangle<0]")
-               .Define("Vertex_mass_Emax",       "Vertex_mass     [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_px_Emax",         "Vertex_px       [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_py_Emax",         "Vertex_py       [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_pz_Emax",         "Vertex_pz       [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_e_Emax",          "Vertex_e        [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_x_Emax",          "Vertex_x        [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_y_Emax",          "Vertex_y        [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_z_Emax",          "Vertex_z        [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_xErr_Emax",       "Vertex_xErr     [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_yErr_Emax",       "Vertex_yErr     [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_zErr_Emax",       "Vertex_zErr     [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_ntrk_Emax",       "Vertex_ntrk     [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_chi2_Emax",       "Vertex_chi2     [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_d2PV_Emax",       "Vertex_d2PV     [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_d2PVSig_Emax",    "Vertex_d2PVSig  [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_Dphi_Emax",       "Vertex_phi      [Vertex_thrust_angle<0 && Vertex_isPV!=1] - EVT_thrust_phi")
-               .Define("Vertex_Dtheta_Emax",     "Vertex_theta    [Vertex_thrust_angle<0 && Vertex_isPV!=1] - EVT_thrust_theta")
-               .Define("Vertex_thrustangle_Emax","- Vertex_thrust_angle    [Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromBc_Emax",     "Vertex_fromBc[Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromBs_Emax",     "Vertex_fromBs[Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromBu_Emax",     "Vertex_fromBu[Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromBd_Emax",     "Vertex_fromBd[Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("Vertex_fromLb_Emax",     "Vertex_fromLb[Vertex_thrust_angle<0 && Vertex_isPV!=1]")
-               .Define("PV_x_Emax",              " PV_x")
-               .Define("PV_y_Emax",              " PV_y")
-               .Define("PV_z_Emax",              " PV_z")
-               .Define("PV_ntrk_Emax",           " PV_ntrk")
-               .Define("PV_mass_Emax",           " PV_mass")
-               .Define("PV_px_Emax",             " PV_px")
-               .Define("PV_py_Emax",             " PV_py")
-               .Define("PV_pz_Emax",             " PV_pz")
-               .Define("PV_e_Emax",              " PV_e")
-               .Define("PV_thrust_angle_Emax",   "-PV_thrust_angle")
-               .Define("PV_Dphi_Emax",           " PV_Dphi")
-               .Define("PV_Dtheta_Emax",         " PV_Dtheta")
+               .Define("Vertex_isPV_Emax",       "Vertex_isPV     [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_mass_Emax",       "Vertex_mass     [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_px_Emax",         "Vertex_px       [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_py_Emax",         "Vertex_py       [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_pz_Emax",         "Vertex_pz       [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_e_Emax",          "Vertex_e        [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_x_Emax",          "Vertex_x        [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_y_Emax",          "Vertex_y        [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_z_Emax",          "Vertex_z        [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_xErr_Emax",       "Vertex_xErr     [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_yErr_Emax",       "Vertex_yErr     [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_zErr_Emax",       "Vertex_zErr     [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_ntrk_Emax",       "Vertex_ntrk     [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_chi2_Emax",       "Vertex_chi2     [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_d2PV_Emax",       "Vertex_d2PV     [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_d2PVSig_Emax",    "Vertex_d2PVSig  [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_Dphi_Emax",       "Vertex_phi      [Vertex_thrust_angle<0 || Vertex_isPV==1] - EVT_thrust_phi")
+               .Define("Vertex_Dtheta_Emax",     "Vertex_theta    [Vertex_thrust_angle<0 || Vertex_isPV==1] - EVT_thrust_theta")
+               .Define("Vertex_thrustangle_Emax","- Vertex_thrust_angle    [Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_fromBc_Emax",     "Vertex_fromBc[Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_fromBs_Emax",     "Vertex_fromBs[Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_fromBu_Emax",     "Vertex_fromBu[Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_fromBd_Emax",     "Vertex_fromBd[Vertex_thrust_angle<0 || Vertex_isPV==1]")
+               .Define("Vertex_fromLb_Emax",     "Vertex_fromLb[Vertex_thrust_angle<0 || Vertex_isPV==1]")
+
                .Define("n_Bc_Emax",              "int(genBc_thrustangle[genBc_thrustangle<0].size())")
                .Define("n_Bs_Emax",              "int(genBs_thrustangle[genBs_thrustangle<0].size())")
                .Define("n_Bu_Emax",              "int(genBu_thrustangle[genBu_thrustangle<0].size())")
@@ -576,7 +555,8 @@ class RDFanalysis():
                 "RP_fromBu_Emin",
                 "RP_fromBd_Emin",
                 "RP_fromLb_Emin",
-                "RP_thrustangle_Emin",   
+                "RP_thrustangle_Emin",
+                "Vertex_isPV_Emin",
                 "Vertex_mass_Emin", 
                 "Vertex_px_Emin",
                 "Vertex_py_Emin",
@@ -600,18 +580,7 @@ class RDFanalysis():
                 "Vertex_fromBu_Emin",
                 "Vertex_fromBd_Emin",
                 "Vertex_fromLb_Emin",
-                "PV_x_Emin",           
-                "PV_y_Emin",           
-                "PV_z_Emin",           
-                "PV_ntrk_Emin",        
-                "PV_mass_Emin",        
-                "PV_px_Emin",          
-                "PV_py_Emin",          
-                "PV_pz_Emin",          
-                "PV_e_Emin",           
-                "PV_thrust_angle_Emin",
-                "PV_Dphi_Emin",        
-                "PV_Dtheta_Emin",      
+
                 "n_Bc_Emin",             
                 "n_Bs_Emin",             
                 "n_Bu_Emin",             
@@ -653,7 +622,8 @@ class RDFanalysis():
                 "RP_fromBu_Emax",
                 "RP_fromBd_Emax",
                 "RP_fromLb_Emax",
-                "RP_thrustangle_Emax",   
+                "RP_thrustangle_Emax",
+                "Vertex_isPV_Emax",
                 "Vertex_mass_Emax",
                 "Vertex_px_Emax",
                 "Vertex_py_Emax",
@@ -677,18 +647,7 @@ class RDFanalysis():
                 "Vertex_fromBu_Emax",
                 "Vertex_fromBd_Emax",
                 "Vertex_fromLb_Emax",
-                "PV_x_Emax",           
-                "PV_y_Emax",           
-                "PV_z_Emax",           
-                "PV_ntrk_Emax",        
-                "PV_mass_Emax",        
-                "PV_px_Emax",          
-                "PV_py_Emax",          
-                "PV_pz_Emax",          
-                "PV_e_Emax",           
-                "PV_thrust_angle_Emax",
-                "PV_Dphi_Emax",        
-                "PV_Dtheta_Emax",      
+
                 "n_Bc_Emax",             
                 "n_Bs_Emax",             
                 "n_Bu_Emax",             

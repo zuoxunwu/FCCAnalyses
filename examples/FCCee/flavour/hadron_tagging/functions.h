@@ -298,12 +298,28 @@ ROOT::VecOps::RVec<int> get_RP_isfromPV(ROOT::VecOps::RVec<VertexingUtils::FCCAn
     ROOT::VecOps::RVec<int> reco_ind = p.reco_ind;
     if (p.vertex.primary == 1)
 	    for (size_t j = 0; j < reco_ind.size(); ++j)
-		    result[j] = 1;
+		    result[reco_ind.at(j)] = 1;
     else
             for (size_t j = 0; j < reco_ind.size(); ++j)
-                    result[j] = 2;
+                    result[reco_ind.at(j)] = 2;
   }
   // return -1 for not belonging to any vertex, 1 for PV, 2 for SV 
+  return result;
+}
+
+ROOT::VecOps::RVec<int> get_RP_Vert_Ind(ROOT::VecOps::RVec<VertexingUtils::FCCAnalysesVertex> vertex,
+                                        ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> reco){
+
+  ROOT::VecOps::RVec<int> result;
+  result.resize(reco.size(),-1);
+  for (size_t iv = 0; iv < vertex.size(); ++iv){
+    auto & p = vertex[iv];
+    ROOT::VecOps::RVec<int> reco_ind = p.reco_ind;
+    for (size_t ip=0;ip<reco_ind.size();ip++){
+	result[reco_ind.at(ip)] = iv;
+    }
+  }
+  // return number of descendants from a given set of ancestors
   return result;
 }
 
@@ -390,6 +406,134 @@ ROOT::VecOps::RVec<int> get_Vertex_containDescendant(ROOT::VecOps::RVec<Vertexin
   // return number of descendants from a given set of ancestors
   return result;
 }
+
+
+ROOT::VecOps::RVec<float> get_RP_dndx(ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> in,
+                                      ROOT::VecOps::RVec<edm4hep::Quantity> dNdx,       // ETrackFlow_2
+                                      ROOT::VecOps::RVec<edm4hep::TrackData> trackdata) // Eflowtrack
+{
+  ROOT::VecOps::RVec<float> result;
+  for (auto & p: in)
+  {
+    if (p.tracks_begin<trackdata.size() && p.charge!=0)
+	result.push_back(dNdx.at(trackdata.at(p.tracks_begin).dxQuantities_begin).value / 1000.);
+    else
+	result.push_back(-9.);
+  }
+  return result;
+}
+
+
+
+
+ROOT::VecOps::RVec<float> get_RP_mtof(ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData> in,
+                                      ROOT::VecOps::RVec<float> track_L,
+                                      ROOT::VecOps::RVec<edm4hep::TrackData> trackdata,
+                                      ROOT::VecOps::RVec<edm4hep::TrackerHitData> trackerhits,
+                                      ROOT::VecOps::RVec<edm4hep::ClusterData> gammadata,
+                                      ROOT::VecOps::RVec<edm4hep::ClusterData> nhdata,
+                                      ROOT::VecOps::RVec<edm4hep::CalorimeterHitData> calohits,
+                                      TLorentzVector V) // primary vertex posotion and time in mm)
+{
+    ROOT::VecOps::RVec<float>  result;
+    for (int j = 0; j < in.size(); ++j)
+    {
+      //if (in.at(j).clusters_begin < nhdata.size() + gammadata.size()) // condition in original code. charge particles have cluster begin 0, why not exclude? Ask Michele. 
+      if (in.at(j).charge == 0 and in.at(j).clusters_begin < nhdata.size() + gammadata.size())
+      {
+        if (in.at(j).type == 130)
+        {
+          // this assumes that in converter photons are filled first and nh after
+          float T = calohits.at(nhdata.at(in.at(j).clusters_begin - gammadata.size()).hits_begin).time;
+          float X = calohits.at(nhdata.at(in.at(j).clusters_begin - gammadata.size()).hits_begin).position.x;
+          float Y = calohits.at(nhdata.at(in.at(j).clusters_begin - gammadata.size()).hits_begin).position.y;
+          float Z = calohits.at(nhdata.at(in.at(j).clusters_begin - gammadata.size()).hits_begin).position.z;
+
+          float tof = T;
+          // compute path length wrt to PV
+          float L = std::sqrt((X - V.X()) * (X - V.X()) + (Y - V.Y()) * (Y - V.Y()) + (Z - V.Z()) * (Z - V.Z())) * 0.001;
+          // std::cout << "tof n: " << T << "  -  L: " << L << std::endl;
+          float beta = L / (tof * 2.99792458e+8);
+          float E = in.at(j).energy;
+          // std::cout << "tof: " << tof << " - L: " << L << " - beta: " << beta << " - energy: " << E <<" - true PID: "<<abs(pids.at(j))<<std::endl;
+          if (beta < 1. && beta > 0.)
+          {
+            result.push_back(E * std::sqrt(1 - beta * beta));
+            // std::cout << "mtof n:" << E * std::sqrt(1-beta*beta)<< std::endl;
+          }
+          else
+          {
+            // std::cout << "problem" << std::endl;
+            result.push_back((-9.));
+          }
+        }
+        else if (in.at(j).type == 22)
+        {
+          result.push_back((0.));
+        }
+	else
+	{
+          result.push_back((-8.));
+        }
+      }
+
+      else if (in.at(j).charge != 0 and in.at(j).tracks_begin < trackdata.size())
+      {
+        if (abs(in.at(j).charge) > 0 and abs(in.at(j).mass - 0.000510999) < 1.e-05)
+        {
+          result.push_back(0.000510999);
+        }
+        else if (abs(in.at(j).charge) > 0 and abs(in.at(j).mass - 0.105658) < 1.e-03)
+        {
+          result.push_back(0.105658);
+        }
+        else
+        {
+
+          // this is the time of the track origin from MC
+          // float Tin = trackerhits.at(trackdata.at(in.at(j).tracks_begin).trackerHits_begin).time;
+
+          // time given by primary vertex
+          float Tin = V.T() * 1e-3 / 2.99792458e+8;
+
+          float Tout = trackerhits.at(trackdata.at(in.at(j).tracks_begin).trackerHits_end - 1).time; // one track and 3 hits per recon. particle are assumed
+          float tof = (Tout - Tin);
+
+          // TODO: path length will have to be re-calculated from vertex position
+          float L = track_L.at(in.at(j).tracks_begin) * 0.001;
+          // std::cout << "tof: " << tof << "  -  L: " << L << std::endl;
+          float beta = L / (tof * 2.99792458e+8);
+          float p = std::sqrt(in.at(j).momentum.x * in.at(j).momentum.x + in.at(j).momentum.y * in.at(j).momentum.y + in.at(j).momentum.z * in.at(j).momentum.z);
+          // std::cout << "tof: " << tof << " - L: " << L << " - beta: " << beta << " - momentum: " << p << " - mtof: " << p * std::sqrt(1/(beta*beta)-1) << std::endl;
+          if (beta < 1. && beta > 0.)
+          {
+            result.push_back(p * std::sqrt(1 / (beta * beta) - 1));
+          }
+          else
+          {
+            result.push_back(0.13957039);
+          }
+        }
+      }
+      else // cluster or track out of range
+      {
+	    result.push_back(-7.);
+      }
+    }
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
