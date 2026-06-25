@@ -660,6 +660,53 @@ float getAxisTheta(const ROOT::VecOps::RVec<float> & axis){
   return tlv.Theta();
 }
 
+
+// Select MCParticles by PDG, dropping those whose daughter is their own charge
+// conjugate (oscillation parent), so an oscillating chain like
+// Bs -> Bsbar -> X is counted once. Useful for Bs (531) and Bd (511), which mix.
+// `in`  is the full MCParticle collection (e.g. Particle).
+// `ind` is the daughter index array (e.g. Particle#1.index, aliased as Particle1).
+struct sel_PDG_no_osc {
+    sel_PDG_no_osc(int arg_pdg, bool arg_chargeconjugate);
+    int m_pdg = 531;
+    bool m_chargeconjugate = true;
+    ROOT::VecOps::RVec<edm4hep::MCParticleData> operator()(
+        ROOT::VecOps::RVec<edm4hep::MCParticleData> in,
+        ROOT::VecOps::RVec<int> ind);
+};
+
+sel_PDG_no_osc::sel_PDG_no_osc(int arg_pdg, bool arg_chargeconjugate)
+    : m_pdg(arg_pdg), m_chargeconjugate(arg_chargeconjugate) {}
+
+ROOT::VecOps::RVec<edm4hep::MCParticleData>
+sel_PDG_no_osc::operator()(ROOT::VecOps::RVec<edm4hep::MCParticleData> in,
+                           ROOT::VecOps::RVec<int> ind) {
+  ROOT::VecOps::RVec<edm4hep::MCParticleData> result;
+  for (size_t i = 0; i < in.size(); ++i) {
+    const auto & p = in[i];
+    bool pdg_match = m_chargeconjugate
+                     ? (std::abs(p.PDG) == std::abs(m_pdg))
+                     : (p.PDG == m_pdg);
+    if (!pdg_match) continue;
+
+    // Skip if any immediate daughter has the same |PDG| with opposite sign
+    // (i.e. the particle oscillated into its own anti-particle).
+    bool osc_parent = false;
+    for (unsigned int d = p.daughters_begin; d < p.daughters_end; ++d) {
+      if (d >= ind.size()) break;
+      int didx = ind.at(d);
+      if (didx < 0 || (size_t)didx >= in.size()) continue;
+      if (in.at(didx).PDG == -p.PDG) {
+        osc_parent = true;
+        break;
+      }
+    }
+    if (osc_parent) continue;
+    result.push_back(p);
+  }
+  return result;
+}
+
 }}
 
 #endif

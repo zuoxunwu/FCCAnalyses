@@ -1,21 +1,22 @@
 #analysis_stage1
 
 # list of samples to process
-#processList_full = {
-#    'p8_ee_Zbb_ecm91':{'chunks':10, 'fraction':0.01},
-#    'p8_ee_Zcc_ecm91':{'chunks':10, 'fraction':0.01},
-#    'p8_ee_Zss_ecm91':{'chunks':10, 'fraction':0.01},
-#    'p8_ee_Zud_ecm91':{'chunks':10, 'fraction':0.01},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2TauTauTAUHADNU':{'chunks':10, 'fraction':0.1},
-#    'p8_ee_Zbb_ecm91_EvtGen_Bs2TauTau':{'chunks':10, 'fraction':0.1},
-#}
 
 processList_full = {
-    'p8_ee_Zbb_ecm91':{'chunks':100, 'fraction':0.1},
+    'p8_ee_Zbb_ecm91_EvtGen_Bu2Inclusive':{'chunks':100},
+    'p8_ee_Zbb_ecm91_EvtGen_Bd2Inclusive':{'chunks':100},
+    'p8_ee_Zbb_ecm91_EvtGen_Bs2Inclusive':{'chunks':100},
     'p8_ee_Zbb_ecm91_EvtGen_Bc2Inclusive':{'chunks':100},
+    'p8_ee_Zbb_ecm91_EvtGen_Lb2Inclusive':{'chunks':100},
+#    'p8_ee_Zbb_ecm91':{'chunks':100, 'fraction':0.1},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bc2Inclusive':{'chunks':100},
 #    'p8_ee_Zcc_ecm91':{'chunks':100},
 #    'p8_ee_Zss_ecm91':{'chunks':100},
 #    'p8_ee_Zud_ecm91':{'chunks':100},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bc2TauNuTAUHADNU':{'chunks':5, 'fraction':0.05},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2PhiMuMu':{'chunks':2, 'fraction':0.1},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2PhiNuNu':{'chunks':2, 'fraction':0.1},
+#    'p8_ee_Zbb_ecm91_EvtGen_Bs2D0KS':{'chunks':5, 'fraction':0.1},
 }
 
 processList_test = {
@@ -38,7 +39,7 @@ prodTag     = "FCCee/winter2023/IDEA/"
 
 # if runBatch = True, save output on eos
 #outputDirEos   = "/eos/experiment/fcc/ee/analyses_storage/flavor/Bs2TauTau/flatNtuples/winter2023/analysis_stage1_noFilter_fullP4/"
-outputDirEos   = "/eos/experiment/fcc/ee/analyses_storage/flavor/hadron_tagging/flatNtuples/winter2023/all_tags_PVbackinVert"
+outputDirEos   = "/eos/experiment/fcc/ee/analyses_storage/flavor/hadron_tagging/flatNtuples/winter2023/all_tags_PVbackinVert_allEvtGenInc"
 
 # if runBatch = False, save output locally
 outputDir   = "outputs/FCCee/flavor/hadron_tagging/analysis_stage1/"
@@ -99,7 +100,7 @@ class RDFanalysis():
                .Define("genBottom_mass",   "FCCAnalyses::MCParticle::get_mass(genBottom)")
                .Define("genBottom_pdg",    "FCCAnalyses::MCParticle::get_pdg(genBottom)")
 
-               .Define("genBs",   "FCCAnalyses::MCParticle::sel_pdgID(531, true)(Particle)")
+               .Define("genBs",   "FCCAnalyses::ZHfunctions::sel_PDG_no_osc(531, true)(Particle, Particle1)")
                .Define("n_genBs",     "FCCAnalyses::MCParticle::get_n   (genBs)")
                .Define("genBs_px",    "FCCAnalyses::MCParticle::get_px  (genBs)")
                .Define("genBs_py",    "FCCAnalyses::MCParticle::get_py  (genBs)")
@@ -122,7 +123,7 @@ class RDFanalysis():
                .Define("genBu_py",    "FCCAnalyses::MCParticle::get_py  (genBu)")
                .Define("genBu_pz",    "FCCAnalyses::MCParticle::get_pz  (genBu)")
 
-               .Define("genBd",   "FCCAnalyses::MCParticle::sel_pdgID(511, true)(Particle)")
+               .Define("genBd",   "FCCAnalyses::ZHfunctions::sel_PDG_no_osc(511, true)(Particle, Particle1)")
                .Define("n_genBd",     "FCCAnalyses::MCParticle::get_n   (genBd)")
                .Define("genBd_px",    "FCCAnalyses::MCParticle::get_px  (genBd)")
                .Define("genBd_py",    "FCCAnalyses::MCParticle::get_py  (genBd)")
